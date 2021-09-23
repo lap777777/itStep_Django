@@ -4,6 +4,7 @@
     django-admin startproject NAZEV_PROJEKTU . - vytvori projekt ve slouzce, kde aktualne jsem
 
 2. spusteni aplikace:
+    musim se presunout do adresare, kde je projekt
     python3 manage.py startapp NAZEV_APLIKACE
 
 3. spustit migraci:
