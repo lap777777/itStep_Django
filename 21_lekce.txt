@@ -1,0 +1,22 @@
+Dokumentace:
+https://docs.djangoproject.com/en/3.2/
+tutorial v dokumentaci:
+https://docs.djangoproject.com/en/3.2/intro/tutorial01/
+
+ukol pristi tyden:
+dokumentace + vlastni projekt
+
+soubor settings.py:
+DEBUG = True ... debagovaci mod, pise podrobne chyby, na zivem serveru to davam na False
+
+kdyz zadam zvire, ktere neni - reseni chyby
+
+path convertor:
+<int:animal>
+<str:animal>
+dalsi jsou slug, uuid, path
+
+HttpResponseNotFound - trida na 404 - muzu tam napsat vlastni text
+HttpResponseRedirect - trida na 302 presmerovavam
+HttpResponse - trida na 200 - zakladni odpoved v poradku
+
