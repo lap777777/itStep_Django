@@ -65,7 +65,7 @@ def zvire_podle_cisla(request, animal):
         return HttpResponseRedirect(animal_name)
         # presmerovani na funkci, kde uz hledam zvire podle jmena a ne cisla
     except:
-        HttpResponseNotFound("Zvire s timto cislem neexistuje")
+        return HttpResponseNotFound("Zvire s timto cislem neexistuje")
         # raise Http404()
  
 # view funkce

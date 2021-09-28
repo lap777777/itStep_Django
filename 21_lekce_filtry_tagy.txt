@@ -22,7 +22,7 @@ HttpResponse - trida na 200 - zakladni odpoved v poradku
 HttpResponseRedirect - trida na 302 presmerovavam
 HttpResponseNotFound - trida na 404 - muzu tam napsat vlastni text
 
-ale jde to delat chytreti:
+ale jde to delat chytreji:
 
 jdu do aplikace a zalozim si slozku templates
 ve slozce templates bude hledat sablony stranek
@@ -37,13 +37,29 @@ vzdy kdyz zmenim settings musim pak znova spustit server
 render_to_string Ok, ale budu pouzivat zapis:
 return render(request, "informace/info.html", slovnik)
 
-Filtry
-{{ | }}
+Filtry {{ | }}
+https://django-filter.readthedocs.io/en/stable/
 - popsany v dokumentaci
 - nejsou to stejne funkce jako v Pythonu
 - pristupy jsou pres . ne pres []
 - funkce se pousti bez zavorek - nejdou zadat parametry
+{{ text | upper}}
+{{ text | lower}}
+{{ text | title}} ... velka prvni pismena slov
+{{ kratky_text | make_list}} ... vytvoreni seznamu
+{{ dvojka_jako_string | add:"5"}}  ... scitani (jak cisla nebo stringu)
+{{ ne | yesno:"uspech,neuspech"}} ... filtr pro Yes/No
+funkce se vola bez zavorek - nelze volat funkce s argumenty, neni je jak je zavolat:
+{{ moje_funkce}}
+pristupy na prvnky seznamu/slovniku/... jsou pres tecky, ne pres hranate zavorky
+{{slovnik.a}}
 
-tagy:
-- pro if, pro for cykly
-{%   %}
+tagy {%   %}
+- pro if, pro for cykly, vzdy se musi ukoncit {% end for%}, {% end if%}
+priklad pro if: 
+{% if zvirata.keys|length > 3 %}
+            <p>Mame hodne zvirat.</p>
+        {% else %}
+            <p>Mame malo zvirat.</p>
+        {% endif %}
+

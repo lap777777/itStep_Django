@@ -14,22 +14,30 @@
     python3 manage.py runserver
 
 ### propojeni urls projektu s aplikacemi:
-soubor urls.py:
+urls.py:
     from django.urls import include
     do urlpatterns = [ ] pridat cestu na aplikaci:
     path("aplikace/", include("aplikace.urls")),
     nebo muzu nastavit pro index:
     path("", include("aplikace.urls")),
+settings.py:
+    pridani aplikace do INSTALLED_APPS - pro renderovani (tvorbu stranek ze sablon)
+    INSTALLED_APPS = [
+        "informace",
+    ]
+    DEBAG = True - pracovni mod, na produkcnim modu po nahrani na web dat False
 
 ### v aplikaci
-soubor urls.py:
+aplikace/urls.py (definuji cestu na views, ktere se budou zobrazovat):
     from django.urls import path  ... import metody path
     from . import views ... import views ze slozky dane aplikace
     zadam cesty na zobrazeni stranek do urlpattens = []
     path("", views.index),
     path("<animal>", views.info_o_zvireti), ... v zavorkach <> zadavam parametry
     path("<prvni>/<druhy>", views.ukazka),
-soubor views.py:
+    - path convertor - int, str, slug, uuid, path, priklad muzu volat jinou funkci pokud dam: 
+        <str:animal> nebo <int:animal>
+aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobrazit):
     from django.shortcuts import render
     from django.http import HttpResponse
     tady vytvorim views, ktere se zavolaji, kdyz prijde HTTP request
@@ -41,6 +49,22 @@ soubor views.py:
         return HttpResponse(response)
     def ukazka(request, prvni, druhy):
         return HttpResponse(f"Prvni je {prvni}, druhy je {druhy}.")
+    from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+    osetreni chyb,kdyz nenajde stranku:
+        try:    
+            return HttpResponse ....
+        except
+            return HttpResponseNotFound ("Stranka nenalezena")
+    presmerovani:
+        return HttpResponseRedirect(nazev funkce)
+    renderovani - tvorba http stranek ze sablon
+        vlozit do views:
+        from django.shortcuts import render
+        funkce budou vracet odkazy na html stranky v templates:
+        return render(request, "informace/info.html", {slovnik, kde jsou odkazy na <parametry>})
+
+aplikace/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views zobrazi)
+    tady ukladam svoje sablony html.stranek - vkladam do nich normalni kod + filtry {{ | }} + tagy {% %}
 
 
 python3 manage.py makemigrations NAZEV_APLIKACE ... ulozi zmeny v modelech jako migrace
