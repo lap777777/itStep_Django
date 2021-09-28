@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informace o zviratech</title>
+</head>
+<body>
+    <h1>Tahle stranka zobrazuje informace o zviratech.</h1>
+    <ul>
+        {% for zvire in zvirata.keys %}
+        <!-- vezmi vsechny klice ze slovniku a udelej z toho seznam-->
+        <li>{{ zvire }}</li>
+        {% endfor %}
+        {% if zvirata.keys|length > 3 %}
+            <p>Mame hodne zvirat.</p>
+        {% else %}
+            <p>Mame malo zvirat.</p>
+        {% endif %}
+    </ul>
+
+</body>
+</html>

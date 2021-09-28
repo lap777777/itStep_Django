@@ -13,7 +13,6 @@
 4. spustit server:
     python3 manage.py runserver
 
-
 ### propojeni urls projektu s aplikacemi:
 soubor urls.py:
     from django.urls import include
@@ -42,3 +41,6 @@ soubor views.py:
         return HttpResponse(response)
     def ukazka(request, prvni, druhy):
         return HttpResponse(f"Prvni je {prvni}, druhy je {druhy}.")
+
+
+python3 manage.py makemigrations NAZEV_APLIKACE ... ulozi zmeny v modelech jako migrace

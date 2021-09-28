@@ -4,13 +4,11 @@ from . import views
 
 urlpatterns = [
     path("", views.index),
+    path("informace", views.informace_o_zvireti),
     path("<int:animal>", views.zvire_podle_cisla),
     # kdyz se zvire da prevest na cislo, tak ze zobrazi vies. zivre podle cisla
     path("<str:animal>", views.info_o_zvireti),
-    # musim pouzit <> aby to bral jako parametr, ktery pouzivam ve funkci info_o_zvireti views.ukazka),
-    path("slon", views.info_o_slonovi),
-    path("zirafa", views.info_o_zirafe),
-    
+    # musim pouzit <> aby to bral jako parametr, ktery pouzivam ve funkci info_o_zvireti views
 ]
 
 # pozor na poradi, vyhodnocuje se postupne, takze pokud vyhovuje jedno, tak uz se nespusti druhe.

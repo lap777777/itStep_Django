@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hratky s Django filtry</title>
+</head>
+<body>
+    <h1>Pojdme si hrat s Django filtry</h1>
+
+    <p>
+        {{ text | upper}}<br>
+        {{ text | lower}}<br>
+        {{ text | title}}<br>
+    </p>
+    <p>
+        {{ abeceda | title }}<br>
+        {{ abeceda | phone2numeric }}
+    </p>
+    <p>
+        {{ kratky_text | make_list}} <br>
+        <!-- funkce make_list v Django je jako list v Pythonu-->
+        {{ cislo | make_list}}
+        <!-- Django udela z cisla str a pak ho da do listu, python by vyhodil chybu - cislo neni interovatelne-->
+    </p>
+    <p>
+        {{ dvojka | add:"5"}}<br>
+        {{ dvojka_jako_string | add:"5"}} 
+        <!-- add: scitani 2 + 7, i kdyz tam ma str -->
+    </p>
+    <p>
+        {{ ano | yesno:"uspech,neuspech"}}<br>
+        {{ ne | yesno:"uspech,neuspech"}}
+    </p>
+    <p>
+        {{ moje_funkce}}
+        <!--v pythonu vracim funkci zavorkami, v Django bez zavorek, nejde spustit funkci v Djangu funkci s parametry - nejde dat zavorky, nemam je kam zadat-->
+    </p>
+    <p>
+        {{seznam.0}}<br>
+        {{slovnik.a}}
+        <!--v Djangu jsou pristupy pres tecku, v pythonu pres hranate zavorky-->
+    </p>
+</body>
+</html>
