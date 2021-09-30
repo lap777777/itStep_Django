@@ -67,4 +67,25 @@ aplikace/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views
     tady ukladam svoje sablony html.stranek - vkladam do nich normalni kod + filtry {{ | }} + tagy {% %}
 
 
-python3 manage.py makemigrations NAZEV_APLIKACE ... ulozi zmeny v modelech jako migrace
+python3 manage.py makemigrations NAZEV_APLIKACE ... vytvori migrace pro zmeny v modelech
+python3 manage.py migrate ... aplikuje migrace (zmeny v modelech) do databaze
+
+
+
+modely - v nich definuji, jak bude vypadat databaze 
+
+typy poli v databazi:
+- models.CharField(max_lenght=200) ... textove podle
+- models.DateTimeFiled("nazev") ... pole datetime
+- models.IntegerField(default=0) ... pole pro cislo
+- models.
+
+python3 manage.py create superuser ... vytvori user, ktery se muze logovat do amin site
+Username: lap
+Email address: admin@admin.com
+Password: **********
+
+registrace modelu v admin.py
+polls/admin.py
+    from .models import Question
+    admin.site.register(Question)
