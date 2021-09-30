@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "polls.apps.PollsConfig",
+    "polls.apps.PollsConfig", # pridani aplikace polls do projektu ... inicializace
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
