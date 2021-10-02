@@ -24,6 +24,7 @@ settings.py:
     pridani aplikace do INSTALLED_APPS - pro renderovani (tvorbu stranek ze sablon)
     INSTALLED_APPS = [
         "informace",
+        "courses.apps.CoursesConfig",
     ]
     DEBAG = True - pracovni mod, na produkcnim modu po nahrani na web dat False
 
@@ -33,10 +34,13 @@ aplikace/urls.py (definuji cestu na views, ktere se budou zobrazovat):
     from . import views ... import views ze slozky dane aplikace
     zadam cesty na zobrazeni stranek do urlpattens = []
     path("", views.index),
-    path("<animal>", views.info_o_zvireti), ... v zavorkach <> zadavam parametry
+    path("<animal>", views.info_o_zvireti()), ... v zavorkach <> zadavam parametry
     path("<prvni>/<druhy>", views.ukazka),
     - path convertor - int, str, slug, uuid, path, priklad muzu volat jinou funkci pokud dam: 
         <str:animal> nebo <int:animal>
+    zadani cesty pres tridy:
+    path("co davam do stranky", nazev_view, name="nazev_html_stranky")
+    napr. path("kurzy", views.CoursesListView.as_view(), name="courses_list")
 aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobrazit):
     from django.shortcuts import render
     from django.http import HttpResponse
@@ -62,9 +66,42 @@ aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobraz
         from django.shortcuts import render
         funkce budou vracet odkazy na html stranky v templates:
         return render(request, "informace/info.html", {slovnik, kde jsou odkazy na <parametry>})
+dalsi moznost tvorit pohledy je pres tridy:
+    from django.views.generic.base import TemplateView
+    from django.views.generic import ListView, DetailView, CreateView
+    TempleteView se pouziva pro stranky bez propojeni na modely
+    ListView se pouziva pro stranky propojene na modely:
+        class CourcesListView(ListView):
+        template_name = "course_list.html" ... nazev html stranky z templates
+        model = models.Course ... na jakem modelu je zalozena
+
+
+### MODELY - v nich definuji, jak bude vypadat databaze 
+
+1. krok - vytvoreni modelu - polls/models.py:
+    class Question(models.Model):
+        typy poli v databazi:
+        - models.CharField(max_lenght=200) ... textove podle
+        - models.DateTimeFiled("nazev") ... pole datetime
+        - models.IntegerField(default=0) ... pole pro cislo
+        - models.
+        models.EmailField(max_length=20)
+2. vytvoreni migraci pro zmeny v modelech:
+    python3 manage.py makemigrations NAZEV_APLIKACE
+3. aplikace migraci - ulozeny zmeny v modelech do databaze: 
+    python3 manage.py migrate
+4. Vytvoreni prvniho uzivatele:
+    python3 manage.py create superuser ... vytvori user, ktery se muze logovat do amin site
+    Username: lap
+    Email address: admin@admin.com
+    Password: **********
+5. registrace modelu v admin.py:
+    polls/admin.py
+        from . import models
+        admin.site.register(models.Question)
+
 
 aplikace/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views zobrazi)
     tady ukladam svoje sablony html.stranek - vkladam do nich normalni kod + filtry {{ | }} + tagy {% %}
-
-
-python3 manage.py makemigrations NAZEV_APLIKACE ... ulozi zmeny v modelech jako migrace
+prehled tagu a filtru
+https://docs.djangoproject.com/en/3.2/ref/templates/builtins/
