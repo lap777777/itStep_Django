@@ -18,7 +18,7 @@
     </style>
   </head>
   <body>
-    {% extends "base.html" %}
+    {% extends "base.html" %} {% load bootstrap4 %} 
     {% block content2 %}
      <h2>Naše pobočka: {{ object.city }}</h2>
     
@@ -31,12 +31,12 @@
     <p>{{ object.email }}</p>
     <h4>Počet zaměstnanců:</h4>
     <p>{{ object.employees_no}}</p>
-    <hr>
-
-
     
-    {% endblock %}
-    {% block content3 %}
+       <p>
+        {% url 'branch_application_list' object.pk as target_url %}
+        {% bootstrap_button "Seznam kurzů" href=target_url button_type="link" button_class="btn-info" %}
+    </p>
+    <hr>
       <p>
         <a href="{% url 'branch' %}" target="_self">Zpět na seznam poboček</a
         >

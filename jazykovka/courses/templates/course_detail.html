@@ -19,10 +19,9 @@
     </style>
   </head>
   <body>
-    {% extends "base.html" %}
-    {% block content2 %}
+    {% extends "base.html" %} {% load bootstrap4 %} {% block content2 %}
     <h2>Název kurzu: {{ object.name }}</h2>
-    <hr>
+    <hr />
     <h3>Kdy:</h3>
     <p>
       {{ object.start | date }}<br />
@@ -41,10 +40,17 @@
     <p>{{ object.lecturer }}</p>
     <h4>Admin kontakt:</h4>
     <p>{{ object.event_coordinator}}</p>
-    <hr>
     <p>
-      <a href="{% url 'course_list' %}" target="_self">Zpět na seznam kurzů</a
-      >
+      {% url 'application_create1' object.pk as target_url %}
+      {% bootstrap_button "Přihlásit se" href=target_url button_type="link" button_class="btn-info" %}
+    </p>
+    <p>
+      {% url 'application_list' object.pk as target_url %}
+      {% bootstrap_button "Seznam přihlášek" href=target_url button_type="link" button_class="btn-info" %}
+    </p>
+    <hr />
+    <p>
+      <a href="{% url 'course_list' %}" target="_self">Zpět na seznam kurzů</a>
     </p>
     {% endblock %}
   </body>

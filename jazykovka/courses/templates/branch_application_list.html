@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Přehled přihlášek</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        padding: 10px !important;
+        background-color: aquamarine !important;
+      }
+    </style>
+  </head>
+  <body>
+    {% extends "base.html" %} {% load bootstrap4 %} {% block content2 %}
+    <h2>Název pobočky: {{ cislo_pobocky.city }}</h2>
+    <hr />
+    <h3>Seznam kurzů:</h3>
+
+    <ul>
+      {% for item in object_list %}
+      <li>
+        <p></p>
+        <h4>{{ item.name }}</h4>
+        {{ item.start | date }}<br />
+        Od: {{ item.start | time }}<br />
+        Do: {{ item.end | time }}<br />
+        <hr />
+      </li>
+      {% endfor %}
+    </ul>
+    <p>
+      <a href="{% url 'branch' %}" target="_self">Zpět na seznam poboček</a>
+    </p>
+    {% endblock %}
+  </body>
+</html>
