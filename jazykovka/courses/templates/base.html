@@ -27,6 +27,11 @@
 
     <!--diky block content muzu vklad bloky do ostatnich stranek, kde tam take block content -->
 
+
+    {% load bootstrap4 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+
     {% block content1 %}
     <div class="hlavicka">
       <ul class="nav justify-content-center">
@@ -48,13 +53,18 @@
         <li class="nav-item">
           <a href="{% url 'contacts' %}" class="nav-link">Kontakty</a>
         </li>
-        
+        <li class="nav-item">
+          <a href="{% url 'application_create' %}" class="nav-link">Přihláška kurz</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'registration' %}" class="nav-link">Registrace</a>
+        </li>
       </ul>
       <hr>
     </div>
     {% endblock %} 
-    
-    
+   
+   
     {% block content2 %}
     <div class="hlavicka">
       <ul class="nav justify-content-center">
@@ -74,7 +84,12 @@
         <li class="nav-item">
           <a href="{% url 'contacts' %}" class="nav-link">Kontakty</a>
         </li>
-        
+       <li class="nav-item">
+          <a href="{% url 'application_create' %}" class="nav-link">Přihláška kurz</a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'registration' %}" class="nav-link">Registrace</a>
+        </li>
       </ul>
       <hr>
     </div>
@@ -89,5 +104,8 @@
    
     {% endblock %}
     <!-- na tech strankach, kam to chci vlozit, tak musim dat {% extends "base.html %"} -->
+
+
+
   </body>
 </html>

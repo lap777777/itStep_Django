@@ -45,3 +45,15 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+class Application(models.Model):
+    email = models.EmailField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True)
+    phone_number = models.TextField(max_length=15, blank=True, null=True)
+
+class Registration(models.Model):
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50)
+    birth = models.DateField()
