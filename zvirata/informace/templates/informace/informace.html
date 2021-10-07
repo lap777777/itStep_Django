@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Info o zvířatech{% endblock %}
 
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
 {% block content %}
     <h1>Tahle stranka zobrazuje informace o zviratech.</h1>
-    {% include "header.html" %}
+    {% include "informace/includes/header.html" %}
     <p>
         Jednoduchy odkaz:<br>
         <a href='{% url "index" %}' target="_self"> Zpet na zacatek </a>
@@ -39,5 +44,5 @@
              ale nic se s tim nebude dit
 
         {%  endcomment%}
-        {% include "footer.html" %}
+        {% include "informace/includes/footer.html" %}
 {% endblock %}

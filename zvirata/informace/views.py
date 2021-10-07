@@ -46,7 +46,7 @@ def info_o_zvireti(request, animal):
     except:
         return HttpResponseNotFound(f"<h2>Zvire {animal} nenalezeno.</h2>")
 
-
+# tohle je jednoduchy model:
 zvirata = {
     "krtek": "krtek zije pod zemi",
     "hroch": "hroch ma hrosi kuzi.",

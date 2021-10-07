@@ -1,10 +1,15 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Úvodní stránka{% endblock %}
 
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
 {% block content %}
     <h1>Pojdme si hrat s Django filtry</h1>
-    {% include "header.html" %}
+    {% include "informace/includes/header.html" %}
     <h3>
         <a href='{% url "info" %}' target="_self">Odkaz na stranku se zvířaty</a>
     </h3>
@@ -41,5 +46,5 @@
         {{slovnik.a}}
         <!--v Djangu jsou pristupy pres tecku, v pythonu pres hranate zavorky-->
     </p>
-    {% include "footer.html" %}
+    {% include "informace/includes/footer.html" %}
 {% endblock %}
