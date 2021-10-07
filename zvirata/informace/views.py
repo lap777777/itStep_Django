@@ -52,7 +52,8 @@ zvirata = {
     "hroch": "hroch ma hrosi kuzi.",
     "krokodyl": "krokodyl ma hodne zubu.",
     "slon": "elephant has a long chobot.",
-    "zirafa": "giraffe has a long neck."
+    "zirafa": "giraffe has a long neck.",
+    "pes": "pes steka."
 }
 
 
