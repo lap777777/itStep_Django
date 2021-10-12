@@ -5,6 +5,10 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("informace", views.informace_o_zvireti, name="info"),
+    path("<str:jmeno>", views.info_animal, name="animal_info"),
+
+
+    
     path("<int:animal>", views.zvire_podle_cisla),
     # kdyz se zvire da prevest na cislo, tak ze zobrazi vies. zivre podle cisla
     path("<str:animal>", views.info_o_zvireti, name="zvire_info"),

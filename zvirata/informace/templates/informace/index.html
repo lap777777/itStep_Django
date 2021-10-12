@@ -13,6 +13,12 @@
     <h3>
         <a href='{% url "info" %}' target="_self">Odkaz na stranku se zvířaty</a>
     </h3>
+    <h3>Přehled zvířat</h3>
+    <ul>
+        {% for animal in animals %}
+            <li><a href="{% url 'animal_info' animal.jmeno%}" target="_self">{{ animal.jmeno }}</a> =  barva: {{ animal.barva }}, vaha {{ animal.vaha }}, zije: {{ animal.zije }}
+        {% endfor%}
+    </ul>
     <p>
         {{ text | upper}}<br>
         {{ text | lower}}<br>
