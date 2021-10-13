@@ -16,7 +16,7 @@ tagy:
 odkazy
 <a href="{% url 'adresa' %}" target="_self">aaa</a>
 
-do url musim dat jako 3 parametr name="cesta"
+do urls musim dat jako 3 parametr name="cesta"
 
 inheritance - dedeni 
 vytvorit si base.html a z te si udelat hlavni sablonu a tam vlozit :

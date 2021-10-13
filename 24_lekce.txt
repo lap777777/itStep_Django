@@ -1,0 +1,39 @@
+kurz Django:
+https://www.udemy.com/course/python-django-2021-complete-course/
+Fridrych kurzy JavaScript
+
+### SUPERUSER
+>>python3 manage.py createsuperuser
+Username: xxx
+email: ladislav.pavelek@gmail.com
+Password: Xxxxxxxxxx
+
+### Registrace modelu do admina 
+import jednoho modelu: from .models import Zvire
+import vice modelu: from . import models
+admin.site.register(Zvire) ... nebo (models.Zvire)
+
+uprava vzhledu tabulku v admin modu - tridy ModelAdmin:
+    class ZvireAdmin(admin.ModelAdmin):
+        list_display = ("jmeno", "vaha", "barva", "zije")
+        list_filter = ("jmeno", "zije")
+    admin.site.register(Zvire, ZvireAdmin)
+
+Do views musim dat odkaz na modely:
+    from .models import Zvire
+do funkce pro zobrazeni musim dat:
+    def index(request):
+        animals = Zvire.objects.all()
+            return render(request, "informace/index.html",{
+                "animals": animals, })
+
+
+
+Chyba 404:
+def info_animal(request, jmeno):
+    try:
+        animal = Zvire.objects.get(jmeno=jmeno)
+    except:
+        raise Http404()
+
+a do templates zakladnich ulozit stranku 404.html
