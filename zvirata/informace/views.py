@@ -1,6 +1,8 @@
 from django.http.response import HttpResponseNotFound
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, Http404
+
+from .models import Zvire
 
 # Create your views here.
 
@@ -8,7 +10,9 @@ def moje_funkce():
     return "vysledek_z_funkce"
 
 def index(request):
+    animals = Zvire.objects.all()
     return render(request, "informace/index.html",{
+        "animals": animals,
         "text": "Ahoj, ja jsem uvodni text",
         "abeceda": "abcdefghijklmnopqrstuvwxyz",
         "kratky_text": "bflmpsvz",
@@ -25,6 +29,20 @@ def index(request):
             "b": "hodnota pod klicem b",
             "c": "hodnota pod klicem c"
         }
+    })
+
+
+def info_animal(request, jmeno):
+    # try:
+        # animal = Zvire.objects.get(jmeno=jmeno)
+    # except:
+        #raise Http404()
+    animal = get_object_or_404(Zvire, jmeno=jmeno)
+    return render(request, "informace/info1.html", {
+        "jmeno": animal.jmeno,
+        "barva": animal.barva[:-1] + "ou",
+        "vaha": animal.vaha,
+        "zije": animal.zije
     })
 
 def informace_o_zvireti(request):
@@ -46,13 +64,14 @@ def info_o_zvireti(request, animal):
     except:
         return HttpResponseNotFound(f"<h2>Zvire {animal} nenalezeno.</h2>")
 
-
+# tohle je jednoduchy model:
 zvirata = {
     "krtek": "krtek zije pod zemi",
     "hroch": "hroch ma hrosi kuzi.",
     "krokodyl": "krokodyl ma hodne zubu.",
     "slon": "elephant has a long chobot.",
-    "zirafa": "giraffe has a long neck."
+    "zirafa": "giraffe has a long neck.",
+    "pes": "pes steka."
 }
 
 
@@ -61,7 +80,7 @@ def ukazka(request, prvni, druhy):
 
 def zvire_podle_cisla(request, animal):
     try:
-        animal_name = list(zvirata.keys())[animal -1]
+        animal_name = list(zvirata1.keys())[animal -1]
         return HttpResponseRedirect(animal_name)
         # presmerovani na funkci, kde uz hledam zvire podle jmena a ne cisla
     except:

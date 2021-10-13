@@ -1,14 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hratky s Django filtry</title>
-</head>
-<body>
-    <h1>Pojdme si hrat s Django filtry</h1>
+{% extends "base.html" %}
+{% load static %}
 
+{% block title %}Úvodní stránka{% endblock %}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
+{% block content %}
+    <h1>Pojdme si hrat s Django filtry</h1>
+    {% include "informace/includes/header.html" %}
+    <h3>
+        <a href='{% url "info" %}' target="_self">Odkaz na stranku se zvířaty</a>
+    </h3>
+    <h3>Přehled zvířat</h3>
+    <ul>
+        {% for animal in animals %}
+            <li><a href="{% url 'animal_info' animal.jmeno%}" target="_self">{{ animal.jmeno }}</a> =  barva: {{ animal.barva }}, vaha {{ animal.vaha }}, zije: {{ animal.zije }}
+        {% endfor%}
+    </ul>
     <p>
         {{ text | upper}}<br>
         {{ text | lower}}<br>
@@ -42,5 +52,5 @@
         {{slovnik.a}}
         <!--v Djangu jsou pristupy pres tecku, v pythonu pres hranate zavorky-->
     </p>
-</body>
-</html>
+    {% include "informace/includes/footer.html" %}
+{% endblock %}

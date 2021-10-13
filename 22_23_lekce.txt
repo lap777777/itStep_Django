@@ -1,0 +1,127 @@
+pyvo - srazy v Praze 1x mesicne
+pyonieri python SR & CR
+hacker rank - reseni ulohy
+advent of code
+
+ukol na stranku na co nejvice filtru - scitani, atd. 
+
+built-in templates and tags
+
+tagy: 
+{# jednoradkovy koment #}
+{% comment %}
+    viceradkovy komentar
+{% endcomment%}
+
+odkazy
+<a href="{% url 'adresa' %}" target="_self">aaa</a>
+
+do urls musim dat jako 3 parametr name="cesta"
+
+inheritance - dedeni 
+vytvorit si base.html a z te si udelat hlavni sablonu a tam vlozit :
+{% block content %}
+    <p>Tato stránka nemá žádný obsah.</p>
+{% endblock %}
+tam, kde budu chtit nacitat obsah z templates 
+a do stranky dat na zacatek:
+{% extends '' %}{% block %} 
+{% endblock %}
+block - udelam si rodicovskou stranku v slozce template v hlavnim projektu
+{% include '' %} vkladani casti template do me stranky
+
+TEMPLATES - v settings.py
+do "DIRS" : vlozit seznam a napsat
+BASE_DIR / "templates"
+
+
+cesty
+base_dir / " templates" - automaticky hleda v templates v hlavnim projektu, do url staci napsat base.html a on hleda v techto templates
+
+dale mam v settings:
+'APP_DIRS': True,
+takze hleda i v templates/informace .. v jednotlivych aplikacich
+takze sablonu muzu zadat rovnou:
+informace.html
+pokud bych tam dal base.html do templates/informace
+tak musim dat do url informace/base.html
+a pokud udelam v informacich podslozku pro includes, tak do url davam
+informace/includes/header.html
+
+u aplikaci delat v templates vzdy dvojitou strukturu, takze pro aplikaci informace udelat strukturu:
+templates/informace/
+
+styly:
+udelat si slozku static/informace/
+
+loadovani statickych souboru
+na zacatek stranky:
+{% load static %}
+a pak vytvorit block a napsat tam odkaz, kde se bude tahat soubor se styly:
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css %}">
+{% endblock%}
+
+po nacteni statickych souboru je potreba restartovat server
+
+natahnuti bootstrapu:
+do settings nakonec pod STATIC_URL dat kod:
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+v hlavni slozce vytvorit adresar static a do nej dat bootstrap.css
+a do base.html si dat pak odkaz na bootstrap:
+<link rel="stylesheet" href="{% static "bootstrap.css" %}">
+
+### MODELY ##########
+
+MVC = model / view / controller
+
+controller ... sbira pozadavky od uzivatele, bere data z modelu a view zobrazuji 
+Django nema controller, kde smerovac (url) rovnou bere data z modelu a zobrazuje 
+v Django to je
+MTV = model / template / view
+view ... controller
+template ... view
+model ... model
+
+databaze:
+- SQL - tabulkove, kazdy prvek ma stejne policka, napr. MySQL, MSSQL, PostgreSQL
+
+- NoSQL - netabulkove, vnorovane slovniky napr. - ruzna policka, napr. MongoDB
+v settings DATABASES = { } ... informace o databazich
+
+v modulu si vytvorim tridu a pak aby se propsaly zmeny do databaze:
+>python3 manage.py makemigration
+>python3 manage.py migrate
+
+# plneni databazove tabulky rucne - pres shell
+>python3 manage.py shell
+>> from informace.models import Zvire - nactu si tabulku:
+>> Zvire.objects.all() ... podivam se co je v tabulkce a ta je prazdna
+>> alik = Zvire(jmeno="alik", vaha=15) ... zadani prvniho objektu do promenne alik
+>> alik.save()
+Prikaz na zobrazeni toho co je ulozeno v tabulce:
+>> Zvire.objects.all()
+doplneni udaju - zavolam object:
+>> alik = Zvire.objects.all()[0]
+a doplnim sloupce:
+alik.barva = "hneda"
+alik.save()
+dalsi zpusob vytvoreni zvirete:
+Zvire.objects.create(jmeno="",...)
+metoda get ... metoda, co vola presne zadanou hodnotu
+Zvire.objects.get(jmeno="Alik")
+ale vola pouze kdyz mam unikatni parametr, jinak hodi chybu pokud tam neni, nebo jsou tam dva
+takze dobre vybirat id nebo pk
+Zvire.objects.get(pk=1)
+vypsani id
+for z in Zvire.objects.all():
+    print (f"{z.id}={z.jmeno})
+metoda filter ... metoda, co profiltruje tabulku a vrati vse, co odpovida zadanemu slovu
+Zvire.objects.filter(barva="hneda")
+metoda delete() ... vymazani zaznamu
+slon = Zvire.objects.get(barva="seda")
+slon.delete()
+
+

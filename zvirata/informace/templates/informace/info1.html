@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Informace o zvířeti
+Informace o zvířeti 1
 {% endblock %}
 
 {% block styling %}
@@ -13,16 +13,19 @@ Informace o zvířeti
     <h1>Tohle jsou informace o zvířeti</h1>
     {% include "informace/includes/header.html" %}
     <p>
-        Dnes tu máme zvíře jménem {{ zvire_v_sablone }}.
+        Dnes tu máme zvíře jménem {{ jmeno }}.
     </p>
     <p>
-        {{ informace | capfirst }}.
+        Má {{ barva }} barvu.
     </p>
     <p>
-        Zvíře má číslo {{ cislo }}.
+        Kolik váží? {{ vaha }} kg.
     </p>
     <p>
-        <a href='{% url "info" %}' target="_self">Zpět na seznam</a>
+        Žije? {{ zije | yesno:"Jasně,Bohužel ne,Nevíme"}}.
+    </p>
+    <p>
+        <a href='{% url "index" %}' target="_self">Zpět na seznam</a>
     </p>
 
     {% include "informace/includes/footer.html" %}

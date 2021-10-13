@@ -1,25 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informace o zviratech</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Info o zvířatech{% endblock %}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
+{% block content %}
     <h1>Tahle stranka zobrazuje informace o zviratech.</h1>
+    {% include "informace/includes/header.html" %}
+    <p>
+        Jednoduchy odkaz:<br>
+        <a href='{% url "index" %}' target="_self"> Zpet na zacatek </a>
+    </p>
+
+
+    <h2>Seznam zvířat</h2>
     <ul>
-        {% for zvire in zvirata.keys %}
         <!-- vezmi vsechny klice ze slovniku a udelej z toho seznam-->
-        <li>{{ zvire }}</li>
+        {% for zvire in zvirata.items %}
+        <li>
+            <a href="{% url 'zvire_info' zvire.0%}" target="_self">{{ zvire.0|upper }} </a>= {{ zvire.1|title }}
+        </li>
         {% endfor %}
-        
+        <!-- v Djangu pristup do slovniku pres tecky takze .0 je klic a .1 je hodnota 
+        V odkazu mam za url nejdriv adresu, ale pak mam parametr - takze podle toho jake zvire zadam, podle toho me hodi na danou stranku
+        -->
+    </ul>
+    
+    <p>
         {% if zvirata.keys|length > 3 %}
             <p>Mame hodne zvirat.</p>
+        {% elif zvirata.keys|length > 5 %}
+            <p>Mame tak akorat zvirat.</p>
         {% else %}
             <p>Mame malo zvirat.</p>
         {% endif %}
-    </ul>
+    </p>
+        {# tajne heslo: orangutan #}
+        {% comment %}
+            Viceradkovy komentar, tady muzu psat cokoliv
+            napr. 
+             {% if zvirata.keys|length > 3 %}
+             ale nic se s tim nebude dit
 
-</body>
-</html>
+        {%  endcomment%}
+        {% include "informace/includes/footer.html" %}
+{% endblock %}
