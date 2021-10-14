@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Evidence{% endblock %}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "styly.css" %}">
+{% endblock%}
+
+{% block content %}
+    <h1>Evidence členů oddílu</h1>
+    <p>Oddíl Skautu ABC 123 má aktuálně následující členy:</p>
+    <ul>
+        {% for clen in clenove %}
+        <li><a href="{% url "detail" clen.prezdivka %}" target="_self">{{ clen.prezdivka }}</a> = {{ clen.jmeno }} {{ clen.prijmeni }}
+        {% endfor %}
+    </ul>
+
+{% include "footer.html" %}
+    
+{% endblock  %}

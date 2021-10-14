@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Úvodní stránka{% endblock %}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "styly.css" %}">
+{% endblock%}
+
+{% block content %}
+    <h1>Skauti</h1>
+    <h2>Vítejte na úvodní stránkce aplikace skauti.</h2>
+
+    <h3>
+        Pro vstup do evidence členů klikni 
+        <a href="{% url "evidence" %}" target="_self">zde.</a> 
+    </h3>
+    
+    <hr>
+   <p>
+   <div class="footer">
+    LaP: &copy;2021
+   </div>
+   </p>
+{% endblock  %}
+
