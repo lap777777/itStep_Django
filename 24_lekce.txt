@@ -17,7 +17,7 @@ uprava vzhledu tabulku v admin modu - tridy ModelAdmin:
     class ZvireAdmin(admin.ModelAdmin):
         list_display = ("jmeno", "vaha", "barva", "zije")
         list_filter = ("jmeno", "zije")
-    admin.site.register(Zvire, ZvireAdmin)
+    admin.site.register(Zvire, ZvireAdmin) .. a pak musim model zaregistrovat
 
 Do views musim dat odkaz na modely:
     from .models import Zvire

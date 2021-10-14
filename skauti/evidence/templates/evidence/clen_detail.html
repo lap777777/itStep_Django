@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Detail Info{% endblock %}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "styly.css" %}">
+{% endblock%}
+
+{% block content %}
+    <h1>Výpis z evidence členů</h1>
+    <p>Oddíl Skautu ABC 123 má aktuálně následující členy:</p>
+    <p>Jméno: {{ jmeno }} </p>
+    <p>Příjmení: {{ prijmeni }}</p>
+    <p>Přezdívka: {{ prezdivka | upper }}</p>
+    <p>Věk: {{ vek }}</p>
+    <p>Zaplacené příspěvky: {{ prispevek | yesno:"Zaplaceno,Nezaplaceno"}}</p>
+    <br>
+    <p>
+        <a href="{% url "evidence" %}" target="_self">Zpět do evidence členů.</a>
+    </p>
+{% include "footer.html" %}
+    
+{% endblock  %}
