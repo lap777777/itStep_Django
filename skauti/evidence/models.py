@@ -26,6 +26,12 @@ class Oddil(models.Model):
     def __str__(self):
         return self.jmeno
 
+    def seznam_skautu(self):
+        # return Clen.objects.filter(oddil__jmeno=self.jmeno)
+        # __ dve podtrzitka pro spojovani modelu a pole pro dotazy (misto tecky)
+        return ", ".join(str(clen.prezdivka) for clen in Clen.objects.filter(oddil__jmeno=self.jmeno))
+        # hezky vypis seznamu na admin strance
+
 class Bobrik(models.Model):
     dovednost = models.CharField(max_length=200)
 

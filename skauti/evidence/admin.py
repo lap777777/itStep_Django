@@ -4,12 +4,13 @@ from .models import Bobrik, Clen, Oddil, Adresa, Bobrik
 # Register your models here.
 
 class ClenAdmin(admin.ModelAdmin):
-    list_display = ("jmeno", "prijmeni", "prezdivka", "vek", "prispevek")
+    list_display = ("jmeno", "prijmeni", "prezdivka", "vek", "prispevek", "oddil")
     list_filter = ("prezdivka",)
     prepopulated_fields = { "slug": ("prezdivka", )}
 
 class OddilAdmin(admin.ModelAdmin):
-    list_display = ("jmeno", "vlajka", "sidlo")
+    list_display = ("jmeno", "vlajka", "sidlo", "seznam_skautu")
+    # 
 
 class AdresaAdmin(admin.ModelAdmin):
     list_display = ("ulice", "cislo", "mesto")
