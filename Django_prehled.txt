@@ -1,7 +1,7 @@
 
 1. nastartovani projektu:
     django-admin startproject NAZEV_PROJEKTU  - vytvori podslozku, kde je projekt
-    django-admin startproject NAZEV_PROJEKTU . - vytvori projekt ve slouzce, kde aktualne jsem
+    django-admin startproject NAZEV_PROJEKTU . - vytvori projekt ve slozce, kde aktualne jsem
 
 2. spusteni aplikace:
     musim se presunout do adresare, kde je projekt
@@ -12,6 +12,7 @@
 
 4. spustit server:
     python3 manage.py runserver
+    do prohlizece zkopirovat adresu z terminalu a nebo napsat localhost:8000
 
 ### propojeni urls projektu s aplikacemi:
 urls.py:
