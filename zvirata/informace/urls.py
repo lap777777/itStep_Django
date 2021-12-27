@@ -5,6 +5,9 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("informace", views.informace_o_zvireti, name="info"),
+
+    path("nove_zvire", views.nove_zvire, name="nove_zvire"),
+
     path("<str:jmeno>", views.info_animal, name="animal_info"),
 
 
@@ -20,3 +23,4 @@ urlpatterns = [
 # idealne kdyz mam <animal> tak uz nedavat ani slona, ani zirafu - rozcestnik musi byt jednoznacny
 
 # path convertor: int, str, slug, uuid, path
+

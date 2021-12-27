@@ -1,0 +1,8 @@
+Formulare
+metoda get:
+metoda post:
+
+
+Pridani zvirat:
+a) administracni strankou - pro tvurce webovky
+b) pres formular pro uzivatele webovych stranek

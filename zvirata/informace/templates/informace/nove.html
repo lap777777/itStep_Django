@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Formular pro nove zvire
+{% endblock %}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
+{% block content %}
+    <H1>Formular pro zadani noveho zvirete</H1>
+
+    <form action="">
+        <label for="jmeno">Jmeno zvirete: </label>
+        <input type="text" name="jmeno" id="jmeno">
+        <button>Sent</button
+        </form>
+
+
+    {% include "informace/includes/footer.html" %}
+
+{% endblock %}

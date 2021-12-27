@@ -30,7 +30,9 @@ def index(request):
             "c": "hodnota pod klicem c"
         }
     })
-
+    
+def nove_zvire(request):
+    return render(request, "informace/nove.html")
 
 def info_animal(request, jmeno):
     # try:
@@ -87,6 +89,7 @@ def zvire_podle_cisla(request, animal):
         return HttpResponseNotFound("Zvire s timto cislem neexistuje")
         # raise Http404()
  
+
 # view funkce
 
 # view trida 
