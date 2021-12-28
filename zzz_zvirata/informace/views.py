@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -11,9 +12,56 @@ zvirata = {
     "zirafa" : "zirafa ma dlouhy krk"
 }
 
-def index(request):
-    return HttpResponse("<h1>Moje prvni stranka v Djangu!</h1>")
+def moje_funkce():
+    return "vysledek_z_funkce"
 
+def index(request):
+    return render(request, "informace/index.html", {
+        "zvirata": zvirata
+    })
+
+def filtry(request):
+    return render(request, "informace/filtry.html", {
+        "text": "Ahoj, ja jsem uvodni text",
+        "abeceda": "abcdefghijeklmnopqrstuvwyz",
+        "kratky_text": "bflm37psvz", 
+        "dlouhy text": "Sla Nanynka do zeli a tam natrhala lupeni.",
+        "cislo": 56,
+        "dvojka": 2,
+        "ano": True,
+        "ne": False,
+        "dvojka_string": "2",
+        "cislo_jako_string": "56",
+        "velke_cislo": 45674755445454,
+        "moje_funkce": moje_funkce,
+        "seznam": ["jablko", "hruska", "tresen", "svestka"],
+        "slovnik": { 
+            "a": "hodnota pod klicem a",
+            "b": "hodnota pod klicem b"
+        }
+    })
+
+def info_o_zvireti(request, animal):
+    try:
+        cislo = list(zvirata.keys().index(animal) + 1)
+        return render(request, "informace/info.html", {
+            "zvire_v_sablone": animal,
+            "informace": zvirata[animal],
+            "cislo": cislo
+        })
+    except:
+        return HttpResponseNotFound(f"Zvire {animal} nebylo nalezeno.")
+
+"""
+# dle metody render_to_string:
+def info_o_zvireti(request, animal):
+    try:
+        data = render_to_string("informace/info.html")
+        return HttpResponse(data)
+    except:
+        return HttpResponseNotFound(f"Zvire {animal} nebylo nalezeno.")
+
+# zakladni HttpResponse:
 def info_o_zvireti(request, animal):
     try:
         cislo = list(zvirata.keys()).index(animal) + 1
@@ -31,5 +79,5 @@ def zvire_podle_cisla(request, animal):
 def demonstrace(request, prvni, druhy):
     return HttpResponse(f"Prvni je {prvni}, druhy je {druhy}.")
 
-
+"""
 

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informace o zvireti</title>
+</head>
+<body>
+    <h1>Tohle jsou informace o zvireti</h1>
+
+    <p>
+        Dnes tu mame zvire jmenem {{ zvire_v_sablone}}.<br>
+        {{ informace | capfirst }}<br>   
+        <!-- filtr v Djangu pro prvni velke pismeno -->
+        Zvire ma cislo {{ cislo }}
+    </p>
+</body>
+</html>

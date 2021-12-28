@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stranka s filtry</title>
+</head>
+<body>
+    <h1>Pojdme si hrat s Django filtry</h1>
+    <!-- Dokumentace:
+        https://docs.djangoproject.com/en/4.0/ref/templates/builtins/
+    -->
+
+    <p>
+        Upper text: {{ text | upper }}<br>
+        Lower text: {{ text | lower }}<br>
+        Title string: {{ text | title }}<br>
+        Prvni velke: {{ text | capfirst }}
+    </p>
+    <p>
+        Title string: {{ abeceda | title }}<br>
+        Phone2numeric: {{ abeceda | phone2numeric }}
+    </p>
+    <p>
+        Seznam ze stringu: {{ kratky_text | make_list }}<br>
+        <!-- make_list vytvori seznam ze str (funkce list()), pozor udela seznam i z cisla, kde by python vyhodil chybu -->
+        Seznam z cisla: {{ velke_cislo | make_list }}
+    </p>
+    <p>
+        Scitani cisla: {{ dvojka | add:"5" }}<br>
+        Scitani stringu: {{ dvojka_string | add:"5" }}
+        <!-- add pricte cislo a bez ohledu, jestli je to cislo nebo string -->
+    </p>
+    <p>
+        Ano varianta: {{ ano | yesno:"uspech, neuspech"}}<br>
+        Ne varianta: {{ ne | yesno:"uspech,neuspech"}}
+    </p>
+    <p>
+       Volam funkci: {{ moje_funkce}}
+       <!-- V sablonach se funkce vola bez zavorek -->
+    </p>
+    <p>
+        Pristup do seznamu: {{ seznam.0 }}<br>
+        Pristup do slovniku: {{ slovnik.a }}
+        <!-- V sablonach se pristupuje do seznamu a slovniku pres tecku -->
+    </p>
+</body>
+</html>
