@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stranka s filtry</title>
-</head>
-<body>
-    <h1>Pojdme si hrat s Django filtry</h1>
-    <!-- Dokumentace:
-        https://docs.djangoproject.com/en/4.0/ref/templates/builtins/
-    -->
+{% extends "base.html" %}
 
+{% block title %}Filtry{% endblock %}
+
+{% block content %}
+    <h1>Pojdme si hrat s Django filtry</h1>
+    {% include header.html %}
+    <h3>Dokumentace:</h3>
+    <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/" target="_blank">Odkaz na dokumentaci tagu a filtru v Djangu</a>
     <p>
         Upper text: {{ text | upper }}<br>
         Lower text: {{ text | lower }}<br>
@@ -45,5 +40,5 @@
         Pristup do slovniku: {{ slovnik.a }}
         <!-- V sablonach se pristupuje do seznamu a slovniku pres tecku -->
     </p>
-</body>
-</html>
+    {% include "footer.html" %}
+{% endblock %}

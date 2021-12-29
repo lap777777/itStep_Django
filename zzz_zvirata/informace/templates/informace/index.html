@@ -1,26 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uvodni stranka</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title%}
+    Prehled zvirat
+{% endblock%}
+
+{% block content %}
     <h1>Tato stranka zobrazuje informace o zviratech.</h1>
     <ul>
-        {% for animal in zvirata.keys %}
-            <li>
-                {{ animal | capfirst }}
-            </li>
-        {% endfor %}
+      {% for animal in zvirata.items %}
+      <li>
+        <a href="{% url 'zvire_info' animal.0 %}" target="_self"
+          >{{ animal.0|upper }}</a
+        >
+        : {{ animal.1|title }}.
+      </li>
+      {% endfor %}
     </ul>
+    {% if zvirata.keys|length > 6 %}
+    <p>Mame hodne zvirat.</p>
+    {% elif zvirata.keys|length > 4 %}
+    <p>Mame tak akorat zvirat.</p>
+    {% else %}
+    <p>Mame malo zvirat.</p>
+    {% endif %} {# tajne heslo: orangutan #}
+    <!-- html komentar - ten je na strance videt, komentar nahore neni videt -->
     <p>
-        {% if zvirata.keys|length > 5 %}
-            Mame hodne zvirat.
-        {% else %}
-            Mame malo zvirat.
-        {% endif %}
+      Dokumentace:<br />
+      <a
+        href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/"
+        target="_blank"
+        >Odkaz na dokumentaci tagu a filtru v Djangu</a
+      >
     </p>
-</body>
-</html>
+    <p>
+        <a href="{% url 'filtry' %}" target="_self">Odkaz na filtry</a>
+    </p>
+{% endblock %}

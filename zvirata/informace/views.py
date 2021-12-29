@@ -82,7 +82,7 @@ def ukazka(request, prvni, druhy):
 
 def zvire_podle_cisla(request, animal):
     try:
-        animal_name = list(zvirata1.keys())[animal -1]
+        animal_name = list(zvirata.keys())[animal -1]
         return HttpResponseRedirect(animal_name)
         # presmerovani na funkci, kde uz hledam zvire podle jmena a ne cisla
     except:

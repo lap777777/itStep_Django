@@ -106,3 +106,25 @@ aplikace/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views
     tady ukladam svoje sablony html.stranek - vkladam do nich normalni kod + filtry {{ | }} + tagy {% %}
 prehled tagu a filtru
 https://docs.djangoproject.com/en/3.2/ref/templates/builtins/
+
+{# #} ... komentar v Djangu, neni videt na finalni strance
+<!-- --> ... html komentar, ten je na finalni strance videt
+delsi komentar v Djangu: {% comment %} dlouhy text ... {% endcomment %}
+
+### URL odkazy
+do url stranky zadat treti parametr name="" a ten pak pouzivam v url odkazech
+path(<animal>, views.info_o_zvireti, name="zvire")
+odkaz: <a href="{% url 'zvire' %}">text</a>
+
+### sablony
+1) base - zakladni sablona
+zalozim si slozku templates v hlavnim adresari - do ni ulozim soubor se sablonou base.html, kde nastavim blocky pro title a content - kam se bude vkladat obsah do zakladni sablony
+pro vkladani obsahu se pouziva znacka {% block XXX%} {% endblock %}
+Do settings do TEMPLATES/DIRS vlozit do seznamu odkaz na templates: BASE_DIR / "templates"
+Do stranky, ktera bude natahovat sablonu vlozim na zacatek {% extends "base.html" %} a tam kam chci vkladat obsah dam {% block XXX %} a {% endblock %}
+2) include - vkladam do base dalsi sablony
+{% include "xxx" %}
+Primarne bere odkaz z hlavniho adresare templates, ale pokud si vytvorim v aplikaci podadresar includes, kde budu mit hlavicku, tak odkaz pak vypada:
+{% include "informace/includes/header.html" %}
+
+

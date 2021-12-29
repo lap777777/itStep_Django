@@ -9,7 +9,8 @@ zvirata = {
     "hroch" : "hroch ma hrosi kuzi",
     "krokodyl" : "krokodyl ma hodne zubu",
     "slon" : "slon ma dlouhy chobot",
-    "zirafa" : "zirafa ma dlouhy krk"
+    "zirafa" : "zirafa ma dlouhy krk",
+    "pes" : "pes smrdi",
 }
 
 def moje_funkce():
@@ -19,6 +20,26 @@ def index(request):
     return render(request, "informace/index.html", {
         "zvirata": zvirata
     })
+
+def info_o_zvireti(request, animal):
+    # muzu zadat zvire, ktere neni ve slovniku
+    # osetrim aby mi vyhodilo chybovou hlasku, kdyz nenajde zvire
+    try:
+        number = list(zvirata.keys()).index(animal) + 1 
+        return render(request, "informace/info.html",{
+            "zvire_v_sablone": animal,
+            "informace": zvirata[animal].capitalize(),
+            "cislo": number
+        })
+    except:
+        return HttpResponseNotFound(f"<h2>Zvire {animal} nenalezeno.</h2>")
+
+def zvire_podle_cisla(request, animal):
+    try:
+        animal_name = list(zvirata.keys())[animal - 1]
+        return HttpResponseRedirect(animal_name)
+    except:
+        return HttpResponseNotFound(f"<h2>Zvire s timto cislem neexistuje</h2>")
 
 def filtry(request):
     return render(request, "informace/filtry.html", {
@@ -41,17 +62,6 @@ def filtry(request):
         }
     })
 
-def info_o_zvireti(request, animal):
-    try:
-        cislo = list(zvirata.keys().index(animal) + 1)
-        return render(request, "informace/info.html", {
-            "zvire_v_sablone": animal,
-            "informace": zvirata[animal],
-            "cislo": cislo
-        })
-    except:
-        return HttpResponseNotFound(f"Zvire {animal} nebylo nalezeno.")
-
 """
 # dle metody render_to_string:
 def info_o_zvireti(request, animal):
@@ -70,12 +80,6 @@ def info_o_zvireti(request, animal):
     except:
         return HttpResponseNotFound(f"<h2>Zvire {animal} nenalezeno</h2>")
 
-def zvire_podle_cisla(request, animal):
-    try:
-        animal_name = list(zvirata.keys())[animal - 1]
-        return HttpResponseRedirect(animal_name)
-    except:
-        return HttpResponseNotFound(f"<h2>Zvire s timto cislem neexistuje</h2>")
 def demonstrace(request, prvni, druhy):
     return HttpResponse(f"Prvni je {prvni}, druhy je {druhy}.")
 
