@@ -34,13 +34,13 @@ aplikace/urls.py (definuji cestu na views, ktere se budou zobrazovat):
     from django.urls import path  ... import metody path
     from . import views ... import views ze slozky dane aplikace
     zadam cesty na zobrazeni stranek do urlpattens = []
-    path("", views.index),
-    path("<animal>", views.info_o_zvireti()), ... v zavorkach <> zadavam parametry
-    path("<prvni>/<druhy>", views.ukazka),
+    path("", views.index, name="index"),
+    path("<animal>", views.info_o_zvireti(), name="animal"), ... v zavorkach <> zadavam parametry
+    path("<prvni>/<druhy>", views.ukazka, nane="ukazka"),
     - path convertor - int, str, slug, uuid, path, priklad muzu volat jinou funkci pokud dam: 
         <str:animal> nebo <int:animal>
     zadani cesty pres tridy:
-    path("co davam do stranky", nazev_view, name="nazev_html_stranky")
+    path("co davam do adresy stranky", nazev_view/funkce, name=jmeno,diky kteremu pak delam url odkazy)
     napr. path("kurzy", views.CoursesListView.as_view(), name="courses_list")
 aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobrazit):
     from django.shortcuts import render
@@ -79,16 +79,17 @@ dalsi moznost tvorit pohledy je pres tridy:
 
 ### MODELY - v nich definuji, jak bude vypadat databaze 
 
-1. krok - vytvoreni modelu - polls/models.py:
+1. krok - vytvoreni modelu v aplikaci - polls/models.py:
     class Question(models.Model):
-        typy poli v databazi:
+        pak zadavam nazvy poli - typy poli v databazi:
         - models.CharField(max_lenght=200) ... textove podle
         - models.DateTimeFiled("nazev") ... pole datetime
         - models.IntegerField(default=0) ... pole pro cislo
-        - models.
-        models.EmailField(max_length=20)
+        - models.EmailField(max_length=20)
+    priklad: jmeno = models.CharField(max_length=30)
+    pokud zadavam nova pole a uz mam zaznamy, tak musim osetrit nulove hodnoty u puvodnich zaznamu - napr. pres null=True: zije = models.BooleanField(null=True)
 2. vytvoreni migraci pro zmeny v modelech:
-    python3 manage.py makemigrations NAZEV_APLIKACE
+    python3 manage.py makemigrations 
 3. aplikace migraci - ulozeny zmeny v modelech do databaze: 
     python3 manage.py migrate
 4. Vytvoreni prvniho uzivatele:
@@ -117,14 +118,42 @@ path(<animal>, views.info_o_zvireti, name="zvire")
 odkaz: <a href="{% url 'zvire' %}">text</a>
 
 ### sablony
+
 1) base - zakladni sablona
 zalozim si slozku templates v hlavnim adresari - do ni ulozim soubor se sablonou base.html, kde nastavim blocky pro title a content - kam se bude vkladat obsah do zakladni sablony
 pro vkladani obsahu se pouziva znacka {% block XXX%} {% endblock %}
 Do settings do TEMPLATES/DIRS vlozit do seznamu odkaz na templates: BASE_DIR / "templates"
 Do stranky, ktera bude natahovat sablonu vlozim na zacatek {% extends "base.html" %} a tam kam chci vkladat obsah dam {% block XXX %} a {% endblock %}
+
 2) include - vkladam do base dalsi sablony
 {% include "xxx" %}
 Primarne bere odkaz z hlavniho adresare templates, ale pokud si vytvorim v aplikaci podadresar includes, kde budu mit hlavicku, tak odkaz pak vypada:
 {% include "informace/includes/header.html" %}
 
+3) static files (ccs, javascript, img - soubory, co se nemeni)
+v aplikaci si vytvorim podadresar static a za nej nazev aplikace - static/informace
+do souboru dam znacku {% load static %} za znacku {% extends%}
+a take do base musim pridat blok pro styly: {% block styling%} {% endblock %}
+a do souboru, kam chci dat styl dam: {% block title%} <link rel="stylesheet" href="{% static "informace/styly.css"%}"> {% endblock%}
+A pred nactenim statickych souboru je potreba restartovat server
+Bootstrap - v hlavnim adresari si udelam slozku static a do ni se vlozim bootstrap.css a pak si do base vlozim {% load static %} a do <head> sekce vlozim link na bootstrap <link rel="stylesheet" href="{% static "bootstrap.css" %}">
+Aby se bootstrap nasel vsude v aplikacich, tak do settings je potreba pridat: STATICFILES_DIRS = [ BASE_DIR / "static" ] do sekce # Static files
+Obrazky - stejne jako styly - do slozky static si dam slozku img a do souboru dam load static a pak do stranky vkladam <img src="{% static ...%}">
 
+
+
+### Prace s databazi v terminalu
+python3 manage.py shell ... spoustim sell, kde budu pracovat s databazi
+from informace.models import Zvire ... import tabulky Zvire
+Zvire.objects.all() ... podivam se, co je v tabulce, kolik tam je objektu - pokud mam definovanou funkci str, tam se vypise dle ni
+alik = Zvire(jmeno="Alik", vaha=15, barva="hneda") ... nova promenna
+alik.save() ... ulozim promennou do databaze
+alik = Zvire.objects.all()[0] .. vytahnuti alika z databaze a ulozeni do promenne
+alik.zije = True ... pridam alikovi novou hodnotu a tu pak ulozim
+alik.save()
+Zvire(jmeno="Micka", vaha=10, ...).save() ... ulozeni zvirete rovnou
+Zvire.objects.create(jmeno="Rex", vaha=20, barva="bila", zije=False) ... dalsi zpusob vytvoreni noveho objektu pres create()
+Zvire.objects.get(jmeno="Alik") ... najde mi objekt, kde mam jmeno Alik
+slon = Zvire.objects.filter(pk=1) ... jiny vyber pres filter() a private key (poradi objektu v databazi) a ulozim si ho do promenne slon
+slon.delete() ... vymazani objektu slon
+exit() ... vyskocim ze shellu

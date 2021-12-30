@@ -1,10 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Filtry{% endblock %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
 
 {% block content %}
     <h1>Pojdme si hrat s Django filtry</h1>
-    {% include header.html %}
+    {% include "informace/includes/header.html" %}
     <h3>Dokumentace:</h3>
     <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/" target="_blank">Odkaz na dokumentaci tagu a filtru v Djangu</a>
     <p>
@@ -40,5 +44,5 @@
         Pristup do slovniku: {{ slovnik.a }}
         <!-- V sablonach se pristupuje do seznamu a slovniku pres tecku -->
     </p>
-    {% include "footer.html" %}
+    {% include "informace/includes/footer.html" %}
 {% endblock %}

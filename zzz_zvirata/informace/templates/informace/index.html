@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
+{% load static%}
 
 {% block title%}
     Prehled zvirat
+{% endblock%}
+
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
 {% endblock%}
 
 {% block content %}
@@ -15,6 +20,7 @@
         : {{ animal.1|title }}.
       </li>
       {% endfor %}
+
     </ul>
     {% if zvirata.keys|length > 6 %}
     <p>Mame hodne zvirat.</p>
@@ -24,6 +30,7 @@
     <p>Mame malo zvirat.</p>
     {% endif %} {# tajne heslo: orangutan #}
     <!-- html komentar - ten je na strance videt, komentar nahore neni videt -->
+
     <p>
       Dokumentace:<br />
       <a
