@@ -35,11 +35,8 @@ def nove_zvire(request):
     return render(request, "informace/nove.html")
 
 def info_animal(request, jmeno):
-    # try:
-        # animal = Zvire.objects.get(jmeno=jmeno)
-    # except:
-        #raise Http404()
-    animal = get_object_or_404(Zvire, jmeno=jmeno)
+    animal = Zvire.objects.get(jmeno=jmeno)
+    #animal = get_object_or_404(Zvire, jmeno=jmeno)
     return render(request, "informace/info1.html", {
         "jmeno": animal.jmeno,
         "barva": animal.barva[:-1] + "ou",

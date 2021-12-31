@@ -1,9 +1,53 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
-from django.template.loader import render_to_string
+from django.shortcuts import render, get_object_or_404
+
+from .models import Zvire
 
 # Create your views here.
 
+def moje_funkce():
+    return "vysledek_z_funkce"
+
+def index(request):
+    zvirata = Zvire.objects.all()
+    return render(request, "informace/index.html", {
+        "zvirata": zvirata
+    })
+
+def info_animal(request, jmeno):
+    animal = get_object_or_404(Zvire, jmeno=jmeno)
+    return render(request, "informace/info.html", {
+        "jmeno": animal.jmeno,
+        "barva": animal.barva[:-1] + "ou",
+        "vaha": animal.vaha,
+        "zije": animal.zije,
+        "cislo": animal.id,
+    })
+
+def filtry(request):
+    return render(request, "informace/filtry.html", {
+        "text": "Ahoj, ja jsem uvodni text",
+        "abeceda": "abcdefghijeklmnopqrstuvwyz",
+        "kratky_text": "bflm37psvz", 
+        "dlouhy text": "Sla Nanynka do zeli a tam natrhala lupeni.",
+        "cislo": 56,
+        "dvojka": 2,
+        "ano": True,
+        "ne": False,
+        "dvojka_string": "2",
+        "cislo_jako_string": "56",
+        "velke_cislo": 45674755445454,
+        "moje_funkce": moje_funkce,
+        "seznam": ["jablko", "hruska", "tresen", "svestka"],
+        "slovnik": { 
+            "a": "hodnota pod klicem a",
+            "b": "hodnota pod klicem b"
+        }
+    })
+    
+def moje_funkce():
+    return "vysledek_z_funkce"
+
+"""
 zvirata = {
     "krtek" : "krtek zije pod zemi",
     "hroch" : "hroch ma hrosi kuzi",
@@ -62,7 +106,6 @@ def filtry(request):
         }
     })
 
-"""
 # dle metody render_to_string:
 def info_o_zvireti(request, animal):
     try:

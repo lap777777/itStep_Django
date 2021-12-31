@@ -12,14 +12,17 @@
 {% block content %}
     <h1>Tato stranka zobrazuje informace o zviratech.</h1>
     <ul>
-      {% for animal in zvirata.items %}
+      {% comment %}
+      {% for animal in zvirata.items %} #}
       <li>
-        <a href="{% url 'zvire_info' animal.0 %}" target="_self"
-          >{{ animal.0|upper }}</a
-        >
-        : {{ animal.1|title }}.
-      </li>
+        <a href="{% url 'zvire_info' animal.0 %}" target="_self">{{ animal.0|upper }}</a> : {{ animal.1|title }}.
+      
       {% endfor %}
+      {% endcomment %}
+
+      {% for animal in zvirata %}
+            <li><a href="{% url 'animal_info' animal.jmeno%}" target="_self">{{ animal.jmeno }}</a> =  {{ animal }}
+      {% endfor%}
 
     </ul>
     {% if zvirata.keys|length > 6 %}
@@ -40,6 +43,6 @@
       >
     </p>
     <p>
-        <a href="{% url 'filtry' %}" target="_self">Odkaz na filtry</a>
+        <a href="{% url 'filtr' %}" target="_self">Odkaz na filtry</a>
     </p>
 {% endblock %}

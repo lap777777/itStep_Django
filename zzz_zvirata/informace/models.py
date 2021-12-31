@@ -9,4 +9,7 @@ class Zvire(models.Model):
     zije = models.BooleanField(null=True)
 
     def __str__(self):
-        return f"Jmeno: {self.jmeno}, vaha: {self.vaha}, barva: {self.barva}"
+        return f"Zvire se jmenuje {self.jmeno}, vazi {self.vaha}, jeho barva je {self.barva} a zije? {self.zije}"
+
+class Meta:
+    verbose_name_plural = "Zvirata"

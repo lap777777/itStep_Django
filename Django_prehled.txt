@@ -1,3 +1,4 @@
+github.com/academind/django-practical-guide-course-code/branches
 
 1. nastartovani projektu:
     django-admin startproject NAZEV_PROJEKTU  - vytvori podslozku, kde je projekt
@@ -67,6 +68,22 @@ aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobraz
         from django.shortcuts import render
         funkce budou vracet odkazy na html stranky v templates:
         return render(request, "informace/info.html", {slovnik, kde jsou odkazy na <parametry>})
+
+views pres modely:
+from .models import Zvire
+from django.shortcuts import get_object_or_404, render
+def index(request):
+    zvirata = Zvire.objects.all()
+    return render(request, "informace/index.html", {
+        "zvirata": zvirata     })
+def info_animal(request, jmeno):
+    animal = get_object_or_404(Zvire, jmeno=jmeno)
+    return render(request, "informace/info1.html", {
+        "jmeno": animal.jmeno,
+        "barva": animal.barva[:-1] + "ou",
+        "vaha": animal.vaha,
+        "zije": animal.zije
+    
 dalsi moznost tvorit pohledy je pres tridy:
     from django.views.generic.base import TemplateView
     from django.views.generic import ListView, DetailView, CreateView
@@ -101,6 +118,18 @@ dalsi moznost tvorit pohledy je pres tridy:
     polls/admin.py
         from . import models
         admin.site.register(models.Question)
+    tabulky, ktere registruji v admin.py jsou pak videt  na webu/admin
+
+V web/admin mi dava mnozne cislo na nazvy tabulek +s - muzu zmenit pomoci tridy Meta:
+    class Meta:
+        verbose_name_plural = "Zvirata"
+
+Admin trida ve admin.py, ktera pomoci list_display upravy, jak vypada tabulka na webu/admin - a jeste ji pak pridam jako parametr do registrace tabulky:
+    class ZvireAdmin(admin.ModelAdmin):
+        list_display = ("jmeno", "vaha", "barva", "zije") ... jak to vypada
+        list_filter = ("jmeno", "zije") ... podle ceho muzu filtrovat
+    admin.site.register(models.Zvire, ZvireAdmin)
+
 
 
 aplikace/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views zobrazi)
@@ -153,7 +182,8 @@ alik.zije = True ... pridam alikovi novou hodnotu a tu pak ulozim
 alik.save()
 Zvire(jmeno="Micka", vaha=10, ...).save() ... ulozeni zvirete rovnou
 Zvire.objects.create(jmeno="Rex", vaha=20, barva="bila", zije=False) ... dalsi zpusob vytvoreni noveho objektu pres create()
-Zvire.objects.get(jmeno="Alik") ... najde mi objekt, kde mam jmeno Alik
-slon = Zvire.objects.filter(pk=1) ... jiny vyber pres filter() a private key (poradi objektu v databazi) a ulozim si ho do promenne slon
+Zvire.objects.get(jmeno="Alik") ... najde mi objekt, kde mam jmeno Alik, hleda pouze jeden
+slon = Zvire.objects.filter(pk=1) ... jiny vyber pres filter() - filter najde vse a vraci to v listu a private key - (poradi objektu v databazi) a ulozim si ho do promenne slon
 slon.delete() ... vymazani objektu slon
+funkce: create(), read(), update(), delete(), get(), filter()
 exit() ... vyskocim ze shellu
