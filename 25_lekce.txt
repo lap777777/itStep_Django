@@ -1,0 +1,55 @@
+slug - dva ke slovum pomlcky
+from django.utils.text import slugify
+slugify(fred dlouha noha) = fed-dlouha-noha
+
+class Meta():
+        verbose_name_plural = "Clenove"
+        ordering = ["prezdivka"]   # razeni v tabulkce, pokud dam pred - "-prezdivka", tak je to sestupne
+
+v Adminu 
+prepopulated_fields = { slug: ("prezdivka",)} ... a bude mi delat automaticky podle v tabulce v databazi
+
+vztahy mezi tabulkami:
+one-to-one ... jeden skaut ma jednu adresu, jedna adresa ma jednoho skauta, v Django je to OneToOneField
+one-to-many ... jeden skaut v jednom oddilu, jeden oddil muze mit vice clenu, definuji to z te strany, kde to mam pouze jednou ... v Djagu je to models. ForeignKey
+many-to-many ... jeden skaut muze mit vice bobriku a jeden bobrik muze mit vice skautu ... v Django pres separatni tabulku a ManyToManyField
+
+primarni + cizi klice, primarni si Django dela samo
+
+one-to-many:
+oddil = models.ForeignKey(nazev_modelu, on_delete co se tane, kdyz se smaze oddil, druh_vztahu)
+
+Co se stane v modulu Oddil
+on_delete=models.PROTECT - dokud je hodnota, tak nejde smazat
+on_delete=models.SET_NULL ... nulova hodnota
+on_delete=models.CASCADE ... smazat vsechny cleny daneho oddilu
+
+one-to-one:
+adresa = models.OneToOneField(nazev, on_delete=...)
+pak se muzu zeptat na ulici u skauta
+>>f.oddil.sidlo.ulice
+
+many-to-many:
+dovednost = models.ManyToManyField(nazev, ) ... v databazi existuje 3 tabulka, ktera propoji dve many-to-many tabulky (ta obsahuje sparovani pk z jedne tabulky s pk druhe tabulky, tam jsou zaznamy one-to-one jako mustek)
+tady neni on delete
+
+
+vyber clena z clenu
+>> c = Clen.objects.all()[0]
+ulozeni prvniho oddilu do modelu oddil:
+>> o1 = Oddil(jmeno="Medvedi", vlajka=True).save()
+ulozeni clena do oddilu
+>> c.oddil = o1
+>> c.save()
+vypis clenu v oddilu v shellu:
+o1.clen_set.all()0
+filtrovani, 
+>>Skaut.objects.filter(oddil__jmeno="Medvedi")
+>>Skaut.objects.filter(oddil__jmeno__contains="dve")
+vyhodi oddily, ktere maji clena s vekem vetsim jak 10
+>>Oddil.objects.filter(Skaut_set__vek_gt=10)
+Pridani dovednosti k clenovi
+>>b = Bobrik(dovendnost="plavani")
+>>f = Skaut.objects.all()[0]
+>>b.save()
+>>b.clen.add(f)

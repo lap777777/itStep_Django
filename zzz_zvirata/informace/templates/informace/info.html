@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+{% load static %}
+
+{% block title %} Informace o zvířeti {% endblock %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
+{% block content %}
+<h1>Tohle jsou informace o zvířeti</h1>
+{% include "informace/includes/header.html" %}
+<p>Dnes tu máme zvíře jménem {{ jmeno | upper }}.</p>
+<p>Kolik vazi? {{ vaha | capfirst }} kg.</p>
+<p>Ma {{ barva }} barvu.</p>
+<p>Zije? {{ zije| yesno:"Jasne,Bohuzel ne,Nevime"}}.</p>
+<p>{{ jmeno }} má číslo {{ cislo }}.</p>
+
+{% include "informace/includes/footer.html" %} 
+{% endblock %}

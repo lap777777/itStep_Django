@@ -19,6 +19,9 @@
             <li><a href="{% url 'animal_info' animal.jmeno%}" target="_self">{{ animal.jmeno }}</a> =  barva: {{ animal.barva }}, vaha {{ animal.vaha }}, zije: {{ animal.zije }}
         {% endfor%}
     </ul>
+    <h3>Dokumentace:</h3>
+    <a href="https://docs.djangoproject.com/en/4.0/ref/templates/builtins/" target="_blank">Odkaz na dokumentaci tagu a filtru v Djangu</a>
+    
     <p>
         {{ text | upper}}<br>
         {{ text | lower}}<br>

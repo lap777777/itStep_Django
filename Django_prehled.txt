@@ -1,17 +1,17 @@
+github.com/academind/django-practical-guide-course-code/branches
+zeptat se na verzi djanga: django-admin --version
 
 1. nastartovani projektu:
     django-admin startproject NAZEV_PROJEKTU  - vytvori podslozku, kde je projekt
-    django-admin startproject NAZEV_PROJEKTU . - vytvori projekt ve slouzce, kde aktualne jsem
-
+    django-admin startproject NAZEV_PROJEKTU . - vytvori projekt ve slozce, kde aktualne jsem
 2. spusteni aplikace:
     musim se presunout do adresare, kde je projekt
     python3 manage.py startapp NAZEV_APLIKACE
-
 3. spustit migraci:
     python3 manage.py migrate
-
 4. spustit server:
     python3 manage.py runserver
+    do prohlizece zkopirovat adresu z terminalu a nebo napsat localhost:8000
 
 ### propojeni urls projektu s aplikacemi:
 urls.py:
@@ -22,25 +22,22 @@ urls.py:
     path("", include("aplikace.urls")),
 settings.py:
     pridani aplikace do INSTALLED_APPS - pro renderovani (tvorbu stranek ze sablon)
-    INSTALLED_APPS = [
-        "informace",
-        "courses.apps.CoursesConfig",
-    ]
+    INSTALLED_APPS = [ "informace", ... ]
     DEBAG = True - pracovni mod, na produkcnim modu po nahrani na web dat False
 
-### v aplikaci
+### rozcestnik URLS:
 aplikace/urls.py (definuji cestu na views, ktere se budou zobrazovat):
     from django.urls import path  ... import metody path
     from . import views ... import views ze slozky dane aplikace
     zadam cesty na zobrazeni stranek do urlpattens = []
-    path("", views.index),
-    path("<animal>", views.info_o_zvireti()), ... v zavorkach <> zadavam parametry
-    path("<prvni>/<druhy>", views.ukazka),
-    - path convertor - int, str, slug, uuid, path, priklad muzu volat jinou funkci pokud dam: 
-        <str:animal> nebo <int:animal>
-    zadani cesty pres tridy:
-    path("co davam do stranky", nazev_view, name="nazev_html_stranky")
+    path("", views.index, name="index"),
+    path("<animal>", views.info_o_zvireti(), name="animal"), ... v zavorkach <> zadavam parametry
+    path("<prvni>/<druhy>", views.ukazka, nane="ukazka"),
+    - path convertor - int, str, slug, uuid, path, priklad muzu volat jinou funkci pokud dam: <str:animal> nebo <int:animal>
+    path("co davam do adresy stranky", nazev_view/funkce, name=jmeno,diky kteremu pak delam url odkazy)
     napr. path("kurzy", views.CoursesListView.as_view(), name="courses_list")
+
+### VIEWS: 
 aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobrazit):
     from django.shortcuts import render
     from django.http import HttpResponse
@@ -48,12 +45,6 @@ aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobraz
     nazvy funkci pak volam v souboru urls (rozcestnik)
     def index(request):
         return HttpResponse("Moje prvni stranka")
-    def info_o_zvireti(request):
-        response = zvirata[animal]  ... nacitam si data ze slovniku, podle zadaneho zvirete
-        return HttpResponse(response)
-    def ukazka(request, prvni, druhy):
-        return HttpResponse(f"Prvni je {prvni}, druhy je {druhy}.")
-    from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
     osetreni chyb,kdyz nenajde stranku:
         try:    
             return HttpResponse ....
@@ -66,42 +57,207 @@ aplikace/views.py (definuji funkce, kde definuji parametry, ktere se maji zobraz
         from django.shortcuts import render
         funkce budou vracet odkazy na html stranky v templates:
         return render(request, "informace/info.html", {slovnik, kde jsou odkazy na <parametry>})
-dalsi moznost tvorit pohledy je pres tridy:
+VIEWS pres modely:
+    from .models import Zvire
+    from django.shortcuts import get_object_or_404, render
+    def index(request):
+        zvirata = Zvire.objects.all()
+        return render(request, "informace/index.html", {
+            "zvirata": zvirata     })
+    def info_animal(request, jmeno):
+        animal = get_object_or_404(Zvire, jmeno=jmeno)
+        return render(request, "informace/info1.html", {
+            "jmeno": animal.jmeno,
+            "barva": animal.barva[:-1] + "ou",
+            "vaha": animal.vaha,
+            "zije": animal.zije
+    jednoduchsi alternativa pro Chybu 404:
+        def info_animal(request, jmeno):
+            try:
+                animal = Zvire.objects.get(jmeno=jmeno)
+            except:
+                raise Http404()
+        a do templates zakladnich ulozit stranku 404.html
+VIEWS pred tridy: 
     from django.views.generic.base import TemplateView
     from django.views.generic import ListView, DetailView, CreateView
     TempleteView se pouziva pro stranky bez propojeni na modely
     ListView se pouziva pro stranky propojene na modely:
         class CourcesListView(ListView):
-        template_name = "course_list.html" ... nazev html stranky z templates
-        model = models.Course ... na jakem modelu je zalozena
-
+            template_name = "course_list.html" ... nazev html stranky
+            model = models.Course ... na jakem modelu je zalozena
 
 ### MODELY - v nich definuji, jak bude vypadat databaze 
 
-1. krok - vytvoreni modelu - polls/models.py:
+1. krok - vytvoreni modelu v aplikaci - polls/models.py:
     class Question(models.Model):
-        typy poli v databazi:
+        pak zadavam nazvy poli - typy poli v databazi:
         - models.CharField(max_lenght=200) ... textove podle
         - models.DateTimeFiled("nazev") ... pole datetime
         - models.IntegerField(default=0) ... pole pro cislo
-        - models.
-        models.EmailField(max_length=20)
+        - models.EmailField(max_length=20)
+    priklad: jmeno = models.CharField(max_length=30, null=True)
+    pokud zadavam nova pole a uz mam zaznamy, tak musim osetrit nulove hodnoty u puvodnich zaznamu - napr. pres null=True: zije = models.BooleanField(null=True)
 2. vytvoreni migraci pro zmeny v modelech:
-    python3 manage.py makemigrations NAZEV_APLIKACE
+    python3 manage.py makemigrations 
 3. aplikace migraci - ulozeny zmeny v modelech do databaze: 
     python3 manage.py migrate
 4. Vytvoreni prvniho uzivatele:
-    python3 manage.py create superuser ... vytvori user, ktery se muze logovat do amin site
+    python3 manage.py createsuperuser ... vytvori user, ktery se muze logovat do amin site
     Username: lap
     Email address: admin@admin.com
     Password: **********
 5. registrace modelu v admin.py:
     polls/admin.py
-        from . import models
+        from . import models (pro jeden model from .models import Zvire)
         admin.site.register(models.Question)
+    tabulky, ktere registruji v admin.py jsou pak videt na webu/admin
+
+V web/admin mi dava mnozne cislo na nazvy tabulek +s - muzu zmenit pomoci tridy Meta - meta se musi vnorit do predchozi tridy:
+    class Meta():
+        verbose_name_plural = "Zvirata"
+        ordering = ["prezdivka"]   # razeni v tabulkce, pokud dam pred - "-prezdivka", tak je to sestupne
+        prepopulated_fields = { "slug": ("prezdivka", )} ... pole, ktere se vytvari sami, slovnik s nazvem a tuple
+
+Admin trida ve admin.py, ktera pomoci list_display upravy, jak vypada tabulka na webu/admin - a jeste ji pak pridam jako parametr do registrace tabulky:
+    class ZvireAdmin(admin.ModelAdmin):
+        list_display = ("jmeno", "vaha", "barva", "zije") ... jak to vypada
+        list_filter = ("jmeno", "zije") ... podle ceho muzu filtrovat
+    admin.site.register(models.Zvire, ZvireAdmin)
+
+# vztahy mezi tabulkami: 
+    one-to-one ... jeden skaut ma jednu adresu, jedna adresa ma jednoho skauta, v Django je to OneToOneField
+    one-to-many ... jeden skaut v jednom oddilu, jeden oddil muze mit vice clenu, definuji to z te strany, kde to mam pouze jednou ... v Djagu je to models. ForeignKey
+    many-to-many ... jeden skaut muze mit vice bobriku a jeden bobrik muze mit vice skautu ... v Django pres separatni tabulku a ManyToManyField
+    primarni + cizi klice, primarni si Django dela samo
+
+    one-to-many:
+        oddil = models.ForeignKey(nazev_modelu, on_delete co se tane, kdyz se smaze oddil, druh_vztahu):
+            on_delete=models.PROTECT - dokud je hodnota, tak nejde smazat
+            on_delete=models.SET_NULL ... nulova hodnota
+            on_delete=models.CASCADE ... pokud smazu u jednoho skauta oddil, tak v oddilu se vymazou vsechny skauti v tomto oddile
+            oddil = models.ForeignKey(Oddil, on_delete=models.SET_NULL, null=True)
+
+    one-to-one:
+        adresa = models.OneToOneField(nazev, on_delete=...)
+        pak se muzu zeptat na ulici u skauta
+        >>f.oddil.sidlo.ulice
+
+    many-to-many:
+        dovednost = models.ManyToManyField(nazev, ) ... v databazi existuje 3 tabulka, ktera propoji dve many-to-many tabulky (ta obsahuje sparovani pk z jedne tabulky s pk druhe tabulky, tam jsou zaznamy one-to-one jako mustek) - tady neni on delete
 
 
-aplikace/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views zobrazi)
-    tady ukladam svoje sablony html.stranek - vkladam do nich normalni kod + filtry {{ | }} + tagy {% %}
+aplikace(BASE_DIR)/templates/ (tady definuji stranky, ktere se po zavolani funkce ve views zobrazi)
+    tady ukladam svoje sablony html.stranek - vkladam do nich normalni kod
+aplikace(BASE_DIR)/templates/includes ... tam muzu vkladat dalsi sablony - hlavnicky, paticky
+aplikace(BASE_DIR)/static ... tam vkladam staticke soubory: styly, obrazky, ...
+
+Filtry {{ | }}
+    https://django-filter.readthedocs.io/en/stable/
+    - popsany v dokumentaci
+    - nejsou to stejne funkce jako v Pythonu
+    - pristupy jsou pres . ne pres []
+    - funkce se pousti bez zavorek - nejdou zadat parametry
+    {{ text | upper}}
+    {{ text | lower}}
+    {{ text | title}} ... velka prvni pismena slov
+    {{ kratky_text | make_list}} ... vytvoreni seznamu
+    {{ dvojka_jako_string | add:"5"}}  ... scitani (jak cisla nebo stringu)
+    {{ ne | yesno:"uspech,neuspech"}} ... filtr pro Yes/No
+    funkce se vola bez zavorek - nelze volat funkce s argumenty, neni je jak je zavolat:
+    {{ moje_funkce}}
+    pristupy na prvnky seznamu/slovniku/... jsou pres tecky, ne pres hranate zavorky
+    {{slovnik.a}}
+    
+tagy {%   %}
+    - pro if, pro for cykly, vzdy se musi ukoncit {% end for%}, {% end if%}
+    priklad pro if: 
+    {% if zvirata.keys|length > 3 %}
+                <p>Mame hodne zvirat.</p>
+            {% else %}
+                <p>Mame malo zvirat.</p>
+            {% endif %}
 prehled tagu a filtru
 https://docs.djangoproject.com/en/3.2/ref/templates/builtins/
+
+{# jednoradkovy koment #}
+{% comment %}
+    viceradkovy komentar
+{% endcomment%}
+
+### URL odkazy
+do url stranky zadat treti parametr name="" a ten pak pouzivam v url odkazech
+path(<animal>, views.info_o_zvireti, name="zvire")
+odkaz: <a href="{% url 'zvire' %}" target="_self">aaa</a>
+
+### sablony
+
+1) base - zakladni sablona
+zalozim si slozku templates v hlavnim adresari - do ni ulozim soubor se sablonou base.html, kde nastavim blocky pro title a content - kam se bude vkladat obsah do zakladni sablony
+pro vkladani obsahu se pouziva znacka {% block XXX%} {% endblock %}
+Do settings do TEMPLATES/DIRS vlozit do seznamu odkaz na templates: BASE_DIR / "templates"
+Do stranky, ktera bude natahovat sablonu vlozim na zacatek {% extends "base.html" %} a tam kam chci vkladat obsah dam {% block XXX %} a {% endblock %}
+
+2) include - vkladam do base dalsi sablony
+{% include "xxx" %}
+Primarne bere odkaz z hlavniho adresare templates, ale pokud si vytvorim v aplikaci podadresar includes, kde budu mit hlavicku, tak odkaz pak vypada:
+{% include "informace/includes/header.html" %}
+
+3) static files (ccs, javascript, img - soubory, co se nemeni)
+v aplikaci si vytvorim podadresar static a za nej nazev aplikace - static/informace
+do souboru dam znacku {% load static %} za znacku {% extends%}
+a take do base musim pridat blok pro styly: {% block styling%} {% endblock %}
+a do souboru, kam chci dat styl dam: {% block title%} <link rel="stylesheet" href="{% static "informace/styly.css"%}"> {% endblock%}
+A pred nactenim statickych souboru je potreba restartovat server
+Bootstrap - v hlavnim adresari si udelam slozku static a do ni se vlozim bootstrap.css a pak si do base vlozim {% load static %} a do <head> sekce vlozim link na bootstrap <link rel="stylesheet" href="{% static "bootstrap.css" %}">
+Aby se bootstrap nasel vsude v aplikacich, tak do settings je potreba pridat: STATICFILES_DIRS = [ BASE_DIR / "static" ] do sekce # Static files
+Obrazky - stejne jako styly - do slozky static si dam slozku img a do souboru dam load static a pak do stranky vkladam <img src="{% static ...%}">
+- po nacteni statickych souboru je potreba restartovat server
+
+
+### Prace s databazi v terminalu
+python3 manage.py shell ... spoustim sell, kde budu pracovat s databazi
+from informace.models import Zvire ... import tabulky Zvire
+Zvire.objects.all() ... podivam se, co je v tabulce, kolik tam je objektu - pokud mam definovanou funkci str, tam se vypise dle ni
+alik = Zvire(jmeno="Alik", vaha=15, barva="hneda") ... nova promenna
+alik.save() ... ulozim promennou do databaze
+alik = Zvire.objects.all()[0] .. vytahnuti alika z databaze a ulozeni do promenne
+alik.zije = True ... pridam alikovi novou hodnotu a tu pak ulozim
+alik.save()
+Zvire(jmeno="Micka", vaha=10, ...).save() ... ulozeni zvirete rovnou
+Zvire.objects.create(jmeno="Rex", vaha=20, barva="bila", zije=False) ... dalsi zpusob vytvoreni noveho objektu pres create()
+Zvire.objects.get(jmeno="Alik") ... najde mi objekt, kde mam jmeno Alik, hleda pouze jeden
+slon = Zvire.objects.filter(pk=1) ... jiny vyber pres filter() - filter najde vse a vraci to v listu a private key - (poradi objektu v databazi) a ulozim si ho do promenne slon
+slon.delete() ... vymazani objektu slon
+funkce: create(), read(), update(), delete(), get(), filter(), add()
+exit() ... vyskocim ze shellu
+filtrovani, 
+>>Skaut.objects.filter(Oddil__jmeno="Medvedi")
+>>Skaut.objects.filter(Oddil__jmeno__contains="dve")
+>>Oddil.objects.filter(Skaut_set__vek_gt=10) - vyhodi oddily, ktere maji clena s vekem vetsim jak 10
+Pridani dovednosti k clenovi
+>>f = Skaut.objects.all()[0]
+>>b = Bobrik(dovednost="plavani").save()
+>>b.save()
+>>b.skaut.add(f)
+field lookups - operatory pro hledani:
+    lte ... less then or equal
+    (i)exact() .. to presne (case insensitive - velka nebo mala pismena)
+    (i)cointain() ... obsahuje
+    (i)startwith() ... zacina
+    (i)endwith() ... konci
+    day, month, week, 
+    filter() - vem to co vyhovuje
+    exclude() = vyhod co vyhovuje
+    count() ... spocita pocet
+
+
+# vytvoreni pole v tabulce:
+admin.py:
+class OddilAdmin(admin.ModelAdmin):
+    list_display = ("jmeno", "vlajka", "sidlo", "seznam_skautu")
+models.py:
+def seznam_skautu(self):
+        # return Clen.objects.filter(oddil__jmeno=self.jmeno)
+        # __ dve podtrzitka pro spojovani modelu a pole pro dotazy (misto tecky)
+        return ", ".join(str(clen.prezdivka) for clen in Clen.objects.filter(oddil__jmeno=self.jmeno))

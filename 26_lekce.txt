@@ -1,0 +1,13 @@
+making queries in Django - v dokumentaci
+
+field lookups - operatory pro hledani:
+lte ... less then or equal
+(i)exact() .. to presne (case insensitive - velka nebo mala pismena)
+(i)cointain() ... obsahuje
+(i)startwith() ... zacina
+(i)endwith() ... konci
+day, month, week, 
+filter() - vem to co vyhovuje
+exclude() = vyhod co vyhovuje
+count() ... spocita pocet
+
