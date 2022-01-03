@@ -19,5 +19,4 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("informace/", include("informace.urls"))  # odkaz na urls aplikace informace
-
 ]

@@ -236,6 +236,28 @@ filtrovani,
 >>Skaut.objects.filter(Oddil__jmeno__contains="dve")
 >>Oddil.objects.filter(Skaut_set__vek_gt=10) - vyhodi oddily, ktere maji clena s vekem vetsim jak 10
 Pridani dovednosti k clenovi
->>b = Bobrik(dovednost="plavani").save()
 >>f = Skaut.objects.all()[0]
+>>b = Bobrik(dovednost="plavani").save()
+>>b.save()
 >>b.skaut.add(f)
+field lookups - operatory pro hledani:
+    lte ... less then or equal
+    (i)exact() .. to presne (case insensitive - velka nebo mala pismena)
+    (i)cointain() ... obsahuje
+    (i)startwith() ... zacina
+    (i)endwith() ... konci
+    day, month, week, 
+    filter() - vem to co vyhovuje
+    exclude() = vyhod co vyhovuje
+    count() ... spocita pocet
+
+
+# vytvoreni pole v tabulce:
+admin.py:
+class OddilAdmin(admin.ModelAdmin):
+    list_display = ("jmeno", "vlajka", "sidlo", "seznam_skautu")
+models.py:
+def seznam_skautu(self):
+        # return Clen.objects.filter(oddil__jmeno=self.jmeno)
+        # __ dve podtrzitka pro spojovani modelu a pole pro dotazy (misto tecky)
+        return ", ".join(str(clen.prezdivka) for clen in Clen.objects.filter(oddil__jmeno=self.jmeno))

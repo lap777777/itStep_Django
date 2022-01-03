@@ -47,6 +47,16 @@ def filtry(request):
 def moje_funkce():
     return "vysledek_z_funkce"
 
+
+
+# funkce pro zadavani novych zvirat:
+
+def nove_zvire(request):
+    return render(request, "informace/nove.html")
+
+
+
+
 """
 zvirata = {
     "krtek" : "krtek zije pod zemi",

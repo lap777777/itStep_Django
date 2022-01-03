@@ -66,3 +66,4 @@ class Clen(models.Model):
         ordering = ["prezdivka"]
 
 
+

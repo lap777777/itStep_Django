@@ -1,6 +1,6 @@
 Formulare
-metoda get:
-metoda post:
+metoda get: vidim v url adrese, kam se odesila: informace/nova_stranka?alik. Metoda get pouziti - pro stahovani stavajicich dat, pro bookmarkovani, predavani adres dale,...
+metoda post: posilani na strane serveru, posilani citlivych dat, neni videt, kam se posila. Metoda post pouziti, kdyz data pridavam, specialne citliva data (hesla,...)
 
 
 Pridani zvirat:

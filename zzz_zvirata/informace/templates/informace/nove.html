@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Formular pro nove zvire{% endblock %}
+
+{% block content %}
+
+<h1>Formular pro nove zvire</h1>
+
+<!-- Jednoduchy formular v HTML -->
+<form action="">
+    <label for="jmeno">Jmeno zvirete: </label>
+    <input type="text" name="jmeno" id="jmeno">
+    <button>SENT</button>
+</form>
+
+
+{% include "informace/includes/footer.html" %}
+{% endblock %}
