@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from .models import Zvire
+from .forms import ZvireForm
 
 # Create your views here.
 
@@ -52,8 +55,18 @@ def moje_funkce():
 # funkce pro zadavani novych zvirat:
 
 def nove_zvire(request):
-    return render(request, "informace/nove.html")
+    if request.method == "POST":
+        jmeno = request == "POST"["jmeno"]
+        if len(jmeno) != 0 and len(jmeno) > 100:
+            print(jmeno)
+            return HttpResponseRedirect(reverse("dekuji"))
+    form = ZvireForm()
+    return render(request, "informace/nove.html", { "formular": form})
+# prace s formularem - pokud je metoda post a zadam jmeno spravne, tak se data odeslou a presmeruje me to na stranku dekuji. Pokud neni splnena podminka, tak me to vrati na formular
 
+
+def dekuji(request):
+    return render(request, "informace/dekuji.html")
 
 
 

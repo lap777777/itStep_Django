@@ -1,8 +1,23 @@
 Formulare
-metoda get: vidim v url adrese, kam se odesila: informace/nova_stranka?alik. Metoda get pouziti - pro stahovani stavajicich dat, pro bookmarkovani, predavani adres dale,...
-metoda post: posilani na strane serveru, posilani citlivych dat, neni videt, kam se posila. Metoda post pouziti, kdyz data pridavam, specialne citliva data (hesla,...)
-
 
 Pridani zvirat:
 a) administracni strankou - pro tvurce webovky
 b) pres formular pro uzivatele webovych stranek
+
+metoda get: vidim v url adrese, kam se odesila: informace/nova_stranka?alik. Metoda get pouziti - pro stahovani stavajicich dat, pro bookmarkovani, predavani adres dale,...
+metoda post: posilani na strane serveru, posilani citlivych dat, neni videt, kam se posila. Metoda post pouziti, kdyz data pridavam, specialne citliva data (hesla,...). Do formulare se pridava {% csrf_token %} znacka, ktera zajisti bezpecnost posilanych dat (verifikace, ze to posilam ja na server)
+
+metoda action ... rika, kam se data odesilaji - pokud chci, aby se zobrazila stejna stranka, taka bud nevyplnim nebo zadam stejnou stranku - "informace/nove_zvire"
+
+Kdyz odeslu formular, tak je dobre presmerovat uzivatele na stranku, kde mu podekuji za odeslani formulare - to je proto, abych neskoncil na strance formulare a pri obnoveni se me stranka neptala, abych znova neodesilal ta sama data.
+return HttpResponseRedirect(reverse("dekuji"))
+
+validovani zadanych dat - pridani podminky za jake probehne redirect:
+
+
+
+
+formulare - vlozim do aplikace novou stranku forms.py
+- do teto stranky davam formulare, jak budou vypadat - vyplnim stejna pole, jako mam v modelu u dane class = do zavorek nemusim davat parametry
+
+do view importuji from .forms import ZvireForm
