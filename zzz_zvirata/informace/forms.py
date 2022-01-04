@@ -1,7 +1,7 @@
 from django import forms
 
 class ZvireForm(forms.Form):
-    jmeno = forms.CharField(label="Jméno zvířete")
+    jmeno = forms.CharField(label="Jméno zvířete", max_length=100)
     vaha = forms.IntegerField()
     barva = forms.CharField()
     zije = forms.BooleanField()

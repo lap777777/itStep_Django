@@ -9,15 +9,28 @@ metoda post: posilani na strane serveru, posilani citlivych dat, neni videt, kam
 
 metoda action ... rika, kam se data odesilaji - pokud chci, aby se zobrazila stejna stranka, taka bud nevyplnim nebo zadam stejnou stranku - "informace/nove_zvire"
 
-Kdyz odeslu formular, tak je dobre presmerovat uzivatele na stranku, kde mu podekuji za odeslani formulare - to je proto, abych neskoncil na strance formulare a pri obnoveni se me stranka neptala, abych znova neodesilal ta sama data.
-return HttpResponseRedirect(reverse("dekuji"))
-
 validovani zadanych dat - pridani podminky za jake probehne redirect:
-
-
-
+Do views.py dam zobrazovaci funkci:
+def nove_zvire(request):
+    if request.method == "POST":
+        jmeno = request == "POST"["jmeno"]
+        if len(jmeno) != 0 and len(jmeno) > 100:
+            print(jmeno)
+            return HttpResponseRedirect(reverse("dekuji"))
+    form = ZvireForm()
+    return render(request, "informace/nove.html", { "formular": form})
+obsahuje podminku - pokud je metoda post a splni se validacni podminka, tak me to prehodi na dekovaci stranku - prehazovani se dela, abych pri refreshe neodesilal znova data z formulare
+objekt ZvireForm() - mam ho tady abych si mohl z forms.py nacist formular na svoji sablonu
 
 formulare - vlozim do aplikace novou stranku forms.py
 - do teto stranky davam formulare, jak budou vypadat - vyplnim stejna pole, jako mam v modelu u dane class = do zavorek nemusim davat parametry
 
 do view importuji from .forms import ZvireForm
+a pak vytvorim tridu ZvireForm() kam dam stejna pole jako mam v modelu.
+Tady se nemusi u poli zadavat parametry, ale mohu tam zadat maxdelku, nazev labelu apod.:
+    class ZvireForm(forms.Form):
+        jmeno = forms.CharField(label="Jméno zvířete", max_length=100)
+
+
+
+
