@@ -6,12 +6,28 @@
 
 <h1>Formular pro nove zvire</h1>
 
-<!-- Jednoduchy formular v HTML -->
-<form action="">
+<!-- 1) Jednoduchy formular v HTML
+<form action="" methond="POST">
+    {% csrf_token %} 
     <label for="jmeno">Jmeno zvirete: </label>
     <input type="text" name="jmeno" id="jmeno">
+    <label for="vaha">Vaha zvirete: </label>
+    <input type="number" name="vaha", id="vaha">
     <button>SENT</button>
 </form>
+ -->
+
+ <!-- 2) formular pres form.py -->
+<form action="" methond="POST">
+    {% csrf_token %} 
+    {% for policko in formular %}
+        <div class="label">{{ policko.label_tag }}</div>
+        <div class="policko">{{ policko }}</div>
+        <div class="chyby">{{ policko.errors }}</div>
+    {% endfor %}
+    <button>SENT</button>
+</form>
+ 
 
 
 {% include "informace/includes/footer.html" %}

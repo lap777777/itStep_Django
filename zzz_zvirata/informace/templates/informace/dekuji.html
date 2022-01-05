@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Podekovani{% endblock %}
+{% block styling %}
+    <link rel="stylesheet" href="{% static "informace/styly.css" %}">
+{% endblock%}
+
+{% block content %}
+
+<h1>Dekuji za pridani noveho zvirete</h1>
+
+<p>
+    <a href="{% url "nove zvire" %}" target="_self">Zadani noveho zvirete.</a>
+</p>
+
+
+{% include "informace/includes/footer.html" %}
+{% endblock %}

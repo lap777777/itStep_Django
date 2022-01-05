@@ -1,8 +1,40 @@
 Formulare
-metoda get: vidim v url adrese, kam se odesila: informace/nova_stranka?alik. Metoda get pouziti - pro stahovani stavajicich dat, pro bookmarkovani, predavani adres dale,...
-metoda post: posilani na strane serveru, posilani citlivych dat, neni videt, kam se posila. Metoda post pouziti, kdyz data pridavam, specialne citliva data (hesla,...)
-
 
 Pridani zvirat:
 a) administracni strankou - pro tvurce webovky
 b) pres formular pro uzivatele webovych stranek
+
+metoda get: vidim v url adrese, kam se odesila: informace/nova_stranka?alik. Metoda get pouziti - pro stahovani stavajicich dat, pro bookmarkovani, predavani adres dale,...
+metoda post: posilani na strane serveru, posilani citlivych dat, neni videt, kam se posila. Metoda post pouziti, kdyz data pridavam, specialne citliva data (hesla,...). Do formulare se pridava {% csrf_token %} znacka, ktera zajisti bezpecnost posilanych dat (verifikace, ze to posilam ja na server)
+
+metoda action ... rika, kam se data odesilaji - pokud chci, aby se zobrazila stejna stranka, taka bud nevyplnim nebo zadam stejnou stranku - "informace/nove_zvire"
+
+validovani zadanych dat - pridani podminky za jake probehne redirect:
+Do views.py dam zobrazovaci funkci:
+def nove_zvire(request):
+    if request.method == "POST":
+        jmeno = request == "POST"["jmeno"]
+        if len(jmeno) != 0 and len(jmeno) > 100:
+            print(jmeno)
+            return HttpResponseRedirect(reverse("dekuji"))
+    form = ZvireForm()
+    return render(request, "informace/nove.html", { "formular": form})
+obsahuje podminku - pokud je metoda post a splni se validacni podminka, tak me to prehodi na dekovaci stranku - prehazovani se dela, abych pri refreshe neodesilal znova data z formulare
+objekt ZvireForm() - mam ho tady abych si mohl z forms.py nacist formular na svoji sablonu
+
+formulare - vlozim do aplikace novou stranku forms.py
+- do teto stranky davam formulare, jak budou vypadat - vyplnim stejna pole, jako mam v modelu u dane class = do zavorek nemusim davat parametry
+
+do view importuji from .forms import ZvireForm
+a pak vytvorim tridu ZvireForm() kam dam stejna pole jako mam v modelu.
+Tady se nemusi u poli zadavat parametry, ale mohu tam zadat maxdelku, nazev labelu apod.:
+    class ZvireForm(forms.Form):
+        jmeno = forms.CharField(label="Jméno zvířete", max_length=100)
+
+
+
+chybove hlasky
+    v sablone {{ policko.errors }}
+    ve formulari forms.CharField(error_messages={"required": "tohle pole se musi vyplnit!"})
+
+    
