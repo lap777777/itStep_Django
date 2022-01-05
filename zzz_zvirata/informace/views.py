@@ -54,16 +54,63 @@ def moje_funkce():
 
 # funkce pro zadavani novych zvirat:
 
+"""
+3. verze - pres zjednousenou tridu ModelForm
+"""
+def nove_zvire(request):
+    if request.method == "POST":
+        formular = ZvireForm(request.POST)
+        if formular.is_valid():
+            #zvire = Zvire(jmeno=formular.cleaned_data["jmeno"],
+            #            vaha=formular.cleaned_data["vaha"],
+            #            barva=formular.cleaned_data["barva"],
+            #            zije=formular.cleaned_data["zije"]
+            #)
+            formular.save()
+            # tady dochazi ke zpracovani dat
+            # tato podminka zvaliduje formular na zaklade pravidel v tride ZvirataForm
+            return HttpResponseRedirect(reverse("dekuji"))
+    else:
+        formular = ZvireForm()
+        # pokud nejprojde formular validaci, vrati se na stranku formulare s puvodnimi daty a hlaskou, co je spatne
+    form = ZvireForm()
+    return render(request, "informace/nove.html", { "formular": form})
+
+
+"""
+druha verze - zacatek s Djangem
+
+def nove_zvire(request):
+    if request.method == "POST":
+        formular = ZvireForm(request.POST)
+        if formular.is_valid():
+            zvire = Zvire(jmeno=formular.cleaned_data["jmeno"],
+                        vaha=formular.cleaned_data["vaha"],
+                        barva=formular.cleaned_data["barva"],
+                        zije=formular.cleaned_data["zije"]
+            )
+            zvire.save()
+            # tady dochazi ke zpracovani dat
+            # tato podminka zvaliduje formular na zaklade pravidel v tride ZvirataForm
+            return HttpResponseRedirect(reverse("dekuji"))
+    else:
+        formular = ZvireForm()
+        # pokud nejprojde formular validaci, vrati se na stranku formulare s puvodnimi daty a hlaskou, co je spatne
+    form = ZvireForm()
+    return render(request, "informace/nove.html", { "formular": form})
+
+
+prvni verze jednoduchy HTML formular
 def nove_zvire(request):
     if request.method == "POST":
         jmeno = request == "POST"["jmeno"]
         if len(jmeno) != 0 and len(jmeno) > 100:
             print(jmeno)
             return HttpResponseRedirect(reverse("dekuji"))
-    form = ZvireForm()
-    return render(request, "informace/nove.html", { "formular": form})
-# prace s formularem - pokud je metoda post a zadam jmeno spravne, tak se data odeslou a presmeruje me to na stranku dekuji. Pokud neni splnena podminka, tak me to vrati na formular
+    return render(request, "informace/nove.html")
 
+# prace s formularem - pokud je metoda post a zadam jmeno spravne, tak se data odeslou a presmeruje me to na stranku dekuji. Pokud neni splnena podminka, tak me to vrati na formular
+"""
 
 def dekuji(request):
     return render(request, "informace/dekuji.html")

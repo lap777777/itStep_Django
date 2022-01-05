@@ -33,4 +33,8 @@ Tady se nemusi u poli zadavat parametry, ale mohu tam zadat maxdelku, nazev labe
 
 
 
+chybove hlasky
+    v sablone {{ policko.errors }}
+    ve formulari forms.CharField(error_messages={"required": "tohle pole se musi vyplnit!"})
 
+    
