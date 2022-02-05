@@ -20,7 +20,7 @@
  <!-- 2) formular pres form.py -->
 <form action="" methond="POST">
     {% csrf_token %} 
-    {% for policko in formular %}
+    {% for policko in form %}
         <div class="label">{{ policko.label_tag }}</div>
         <div class="policko">{{ policko }}</div>
         <div class="chyby">{{ policko.errors }}</div>

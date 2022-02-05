@@ -1,21 +1,39 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.generic.base import TemplateView
+from django.views.generic import ListView, DetailView
+from django.views import View
+from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
 
 from .models import Zvire
 from .forms import ZvireForm
+
 
 # Create your views here.
 
 def moje_funkce():
     return "vysledek_z_funkce"
 
+# Prvni moznost pres tridy, druha moznost pres funkce. Urls.py rozhoduje o tom, ktera se pouzije:
+# a) pres tridu:
+class VypisZvirataView(ListView):
+    model = Zvire
+    template_name = "informace/index.html"
+    context_object_name = "zvirata"
+# b) pres funkci:
 def index(request):
     zvirata = Zvire.objects.all()
     return render(request, "informace/index.html", {
         "zvirata": zvirata
     })
 
+# Prvni moznost pres tridy, druha moznost pres funkce. Urls.py rozhoduje o tom, ktera se pouzije:
+# a) pres tridu:
+class InfoOZvireti(DetailView):
+    model = Zvire
+    template_name = "informace/info1.html"
+# puvodni varianta pres funkci
 def info_animal(request, jmeno):
     animal = get_object_or_404(Zvire, jmeno=jmeno)
     return render(request, "informace/info.html", {
@@ -57,25 +75,57 @@ def moje_funkce():
 """
 3. verze - pres zjednousenou tridu ModelForm
 """
+# Prvni moznost pres tridy, druha moznost pres funkce. Urls.py rozhoduje o tom, ktera se pouzije:
+# a) pres tridu:
+class NoveZvireView(View):
+    def get(self, request):
+        form = ZvireForm()
+        return self.render(form, request)
+    def post(self, request):
+        form = ZvireForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect("dekuji")
+        return self.render(form, request)
+    def render(self, form, request):
+        return render(request, "informace/nove.html", {
+            "form": form
+        })
+
+# b) pres funkci:
 def nove_zvire(request):
     if request.method == "POST":
-        formular = ZvireForm(request.POST)
-        if formular.is_valid():
+        form = ZvireForm(request.POST)
+        # tady dochazi ke zpracovani dat
+        # tato podminka zvaliduje formular na zaklade pravidel v tride ZvirataForm
+        if form.is_valid():
             #zvire = Zvire(jmeno=formular.cleaned_data["jmeno"],
             #            vaha=formular.cleaned_data["vaha"],
             #            barva=formular.cleaned_data["barva"],
             #            zije=formular.cleaned_data["zije"]
             #)
-            formular.save()
-            # tady dochazi ke zpracovani dat
-            # tato podminka zvaliduje formular na zaklade pravidel v tride ZvirataForm
+            form.save()
             return HttpResponseRedirect(reverse("dekuji"))
     else:
-        formular = ZvireForm()
+        form = ZvireForm()
         # pokud nejprojde formular validaci, vrati se na stranku formulare s puvodnimi daty a hlaskou, co je spatne
     form = ZvireForm()
-    return render(request, "informace/nove.html", { "formular": form})
+    return render(request, "informace/nove.html", { "form": form})
 
+# c) jina trida View - FormView:
+class NoveZvire2View(FormView):
+    form_class = ZvireForm
+    template_name = "informace/nove.html"
+    succes_url = "dekuji"
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+# d) jina trida View - CreateView:
+class NoveZvire3View(CreateView):
+    form_class = ZvireForm
+    # alternativne: fields = "__all__" ... vyberu vsechny pole z modelu, pokud bych chtel jedno vyloucit: exclude = ["zije"] ... vybere vsechny krome zije
+    template_name = "informace/nove.html"
+    succes_url = "dekuji"
 
 """
 druha verze - zacatek s Djangem
@@ -111,6 +161,15 @@ def nove_zvire(request):
 
 # prace s formularem - pokud je metoda post a zadam jmeno spravne, tak se data odeslou a presmeruje me to na stranku dekuji. Pokud neni splnena podminka, tak me to vrati na formular
 """
+
+# Prvni moznost pres tridy, druha moznost pres funkce. Urls.py rozhoduje o tom, ktera se pouzije:
+
+class DekujiView(TemplateView):
+    template_name = "informace/dekuji.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["zprava"] = "ahoj tohle je zprava"
+        return context
 
 def dekuji(request):
     return render(request, "informace/dekuji.html")

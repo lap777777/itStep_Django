@@ -1,0 +1,68 @@
+Class based views 
+
+uls.py:
+    from . import views
+    path("", views.VypisZvirataView.as_view,name="index")
+    path("dekuji", views.DekujiView.as_view(), name="dekuji")
+
+views.py:
+    from django.views.generic.base import TemplateView
+    from django.views.generic import ListView, DetailView
+    from django.views import View
+    from django.views.generic.edit import FormView, CreateView, DeleteView, UpdateView
+    class VypisZvirataView(ListView):
+        model = Zvire ... jaky model pouziji
+        template_name = "informace/index.html" ... jakou sablonu pouziji
+        context_object_name = "zvirata" ... jmeno promenne odkud beru data
+    class DekujiView(TemplateView):
+        template_name = "informace/dekuji.html"
+    class InfoOZvireti(DetailView):
+        model = Zvire
+        template_name = "informace/info1.html"
+    class NoveZvireView(View):
+        def get(self, request):
+            formular = ZvireForm()
+            return self.render(formular, request)
+        def post(self, request):
+            formular = ZvireForm(request.POST)
+            if formular.is_valid():
+                return HttpResponseRedirect("dekuji")
+            return self.render(formular, request)
+        def render(self, formular, request):
+            return render(request, "informace/nove.html", {
+                "formular": formular
+            })
+    class NoveZvire2View(FormView):
+        form_class = ZvireForm
+        template_name = "informace/nove.html"
+        succes_url = "dekuji"
+        def form_valid(self, form):
+            form.save()
+            return super().form_valid(form)
+    class NoveZvire3View(CreateView):
+        form_class = ZvireForm
+        # alternativne: fields = "__all__" ... vyberu vsechny pole z modelu, pokud bych chtel jedno vyloucit: exclude = ["zije"] ... vybere vsechny krome zije
+        template_name = "informace/nove.html"
+        succes_url = "dekuji"
+
+presmerovani adres v url.py
+    from django.views.generic import RedirectView
+    path('', RedirectView.as_view(url="informace/", permananent=True))
+
+
+kurz django na githubu:
+github.com/academind/django-practical-guide-course-code/
+tutorial MDN Web Docs:
+developer.mozilla.org/en-US/docs/Learn/Server-side/Django/
+
+
+Vystaveni/Deployment:
+v settings.py:
+    DEBUG = False
+    ALLOWED_HOSTS = [xxxxxx]
+    DATABASES: Nastaveni databaze - sqlite pro male projekty, pro vetsi mit databazi a pripojeni k ni (heslo viz getenv dole)
+    SECRET_KEY = getenv("SECRET_KEY")
+    na disk, kde je projekt ulozim soubor SECRET_KEY, kam zadam SECRET_KEY z Djanga
+    Staticke soubory: muzu nechat ve slozce statis u malych projektu, u velkych kvuli uspore na css vyuzit sluzbu s3 od Amazonu napr. 
+
+
